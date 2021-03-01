@@ -17,7 +17,7 @@ With Kobe vs. League, users will be able to:
 
 ## Wireframes
 
-![wire frame](/home/roger/repos/kobe-vs-team/img/KobevsLeague.svg)
+![wire frame](https://github.com/caroger/kobe-vs-team/blob/main/img/KobevsLeague.svg)
 
 ## Architecture and Technologies
 
