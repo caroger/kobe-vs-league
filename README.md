@@ -29,7 +29,7 @@ With Kobe vs. League, users will be able to:
 
 ## Implementation Timeline
 
-**Day1: ** Obtain and process necessary data, set up necessay Node modules and created a working github page to display a static Kobe Bryant image
+**Day1:** Obtain and process necessary data, set up necessay Node modules and created a working github page to display a static Kobe Bryant image
 
 **Day2:**  Create a functional and interactive USA map with NBA logos mapped to correct locations. On hover, each logo should display some summary status
 
