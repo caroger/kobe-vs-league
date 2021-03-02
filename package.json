@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/caroger/kobe-vs-team/issues"
   },
-  "homepage": "https://github.com/caroger/kobe-vs-team#readme",
+  "homepage": "http://rogerhu.space/kobe-vs-league/",
   "devDependencies": {
     "gh-pages": "^2.2.0",
     "webpack": "^4.42.1",
