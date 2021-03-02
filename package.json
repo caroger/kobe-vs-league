@@ -1,0 +1,33 @@
+{
+  "name": "kobe-vs-league",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx webpack -w --mode=development",
+    "predeploy": "npm run build",
+    "build": "webpack --watch --mode=development",
+    "deploy": "npm run build && gh-pages -d dist",
+    "pages": "gh-pages -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caroger/kobe-vs-team.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caroger/kobe-vs-team/issues"
+  },
+  "homepage": "https://github.com/caroger/kobe-vs-team#readme",
+  "devDependencies": {
+    "gh-pages": "^2.2.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^4.5.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
