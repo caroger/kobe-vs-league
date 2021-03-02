@@ -1,10 +1,11 @@
-import _ from "lodash";
-function component() {
-  const element = document.createElement("div");
+import { select } from "d3";
 
-  element.innerHTML = _.join(["Hello", "Kobe"], " ");
+const svg = select("svg");
+const circle = svg.append("circle");
 
-  return element;
-}
+const width = parseFloat(svg.attr("width"));
+const height = parseFloat(svg.attr("height"));
 
-document.body.appendChild(component());
+circle.attr("r", height / 2);
+circle.attr("cx", width / 2);
+circle.attr("cy", height / 2);
