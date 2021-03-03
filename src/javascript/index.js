@@ -1,3 +1,4 @@
+import "../css/styles.css";
 import { select } from "d3";
 
 const svg = select("svg");
