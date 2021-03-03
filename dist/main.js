@@ -31244,14 +31244,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const svg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("svg");
-const circle = svg.append("circle");
-
 const width = parseFloat(svg.attr("width"));
 const height = parseFloat(svg.attr("height"));
 
-circle.attr("r", height / 2);
-circle.attr("cx", width / 2);
-circle.attr("cy", height / 2);
+const render = (data) => {
+  const xValue = (d) => d.population;
+  const yValue = (d) => d.country;
+
+  const xScale = Object(d3__WEBPACK_IMPORTED_MODULE_0__["scaleLinear"])()
+    .domain([0, Object(d3__WEBPACK_IMPORTED_MODULE_0__["max"])(data, xValue)])
+    .range([0, width]);
+
+  const yScale = Object(d3__WEBPACK_IMPORTED_MODULE_0__["scaleBand"])().domain(data.map(yValue)).range([0, height]);
+  svg
+    .selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("y", (d) => yScale(yValue(d)))
+    .attr("width", (d) => xScale(xValye(d)))
+    .attr("height", yScale.bandwidth());
+};
+
+Object(d3__WEBPACK_IMPORTED_MODULE_0__["csv"])("../assets/data/data.csv").then((data) => {
+  data.forEach((d) => {
+    d.population = +d.population * 1000;
+  });
+  render(data);
+});
 
 
 /***/ })
