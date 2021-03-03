@@ -16,7 +16,7 @@
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _css_styles_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../css/styles.css */ \"./src/css/styles.css\");\n/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3 */ \"./node_modules/d3/index.js\");\n\n\nvar svg = (0,d3__WEBPACK_IMPORTED_MODULE_1__.select)(\"svg\");\nvar circle = svg.append(\"circle\");\nvar width = parseFloat(svg.attr(\"width\"));\nvar height = parseFloat(svg.attr(\"height\"));\ncircle.attr(\"r\", height / 2);\ncircle.attr(\"cx\", width / 2);\ncircle.attr(\"cy\", height / 2);\n\n//# sourceURL=webpack://kobe-vs-league/./src/javascript/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ \"./node_modules/d3/index.js\");\n\nvar us = d3__WEBPACK_IMPORTED_MODULE_0__.json(\"https://gist.githubusercontent.com/ipeter50/f70acb9dfb5a0285a61278e1e177d489/raw/5223819a98dd722398037822da8548365f6cf470/us.json\").then(function (data) {\n  return console.log(data);\n});\nvar map_svg = d3__WEBPACK_IMPORTED_MODULE_0__.select(\".map_svg\");\nmap_svg.style(\"background-color\", \"red\");\n\n//# sourceURL=webpack://kobe-vs-league/./src/javascript/index.js?");
 
 /***/ }),
 
@@ -5577,16 +5577,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"InternMap\": () => (/* binding */ InternMap),\n/* harmony export */   \"InternSet\": () => (/* binding */ InternSet)\n/* harmony export */ });\nclass InternMap extends Map {\n  constructor(entries = [], key = keyof) {\n    super();\n    Object.defineProperties(this, {_intern: {value: new Map()}, _key: {value: key}});\n    for (const [key, value] of entries) this.set(key, value);\n  }\n  get(key) {\n    return super.get(intern_get(this, key));\n  }\n  has(key) {\n    return super.has(intern_get(this, key));\n  }\n  set(key, value) {\n    return super.set(intern_set(this, key), value);\n  }\n  delete(key) {\n    return super.delete(intern_delete(this, key));\n  }\n}\n\nclass InternSet extends Set {\n  constructor(values = [], key = keyof) {\n    super();\n    Object.defineProperties(this, {_intern: {value: new Map()}, _key: {value: key}});\n    for (const value of values) this.add(value);\n  }\n  has(value) {\n    return super.has(intern_get(this, value));\n  }\n  add(value) {\n    return super.add(intern_set(this, value));\n  }\n  delete(value) {\n    return super.delete(intern_delete(this, value));\n  }\n}\n\nfunction intern_get({_intern, _key}, value) {\n  const key = _key(value);\n  return _intern.has(key) ? _intern.get(key) : value;\n}\n\nfunction intern_set({_intern, _key}, value) {\n  const key = _key(value);\n  if (_intern.has(key)) return _intern.get(key);\n  _intern.set(key, value);\n  return value;\n}\n\nfunction intern_delete({_intern, _key}, value) {\n  const key = _key(value);\n  if (_intern.has(key)) {\n    value = _intern.get(value);\n    _intern.delete(key);\n  }\n  return value;\n}\n\nfunction keyof(value) {\n  return value !== null && typeof value === \"object\" ? value.valueOf() : value;\n}\n\n\n//# sourceURL=webpack://kobe-vs-league/./node_modules/internmap/src/index.js?");
-
-/***/ }),
-
-/***/ "./src/css/styles.css":
-/*!****************************!*\
-  !*** ./src/css/styles.css ***!
-  \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://kobe-vs-league/./src/css/styles.css?");
 
 /***/ })
 

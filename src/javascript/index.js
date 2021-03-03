@@ -1,12 +1,10 @@
-import "../css/styles.css";
-import { select } from "d3";
+import * as d3 from "d3";
 
-const svg = select("svg");
-const circle = svg.append("circle");
+const us = d3
+  .json(
+    "https://gist.githubusercontent.com/ipeter50/f70acb9dfb5a0285a61278e1e177d489/raw/5223819a98dd722398037822da8548365f6cf470/us.json"
+  )
+  .then((data) => console.log(data));
 
-const width = parseFloat(svg.attr("width"));
-const height = parseFloat(svg.attr("height"));
-
-circle.attr("r", height / 2);
-circle.attr("cx", width / 2);
-circle.attr("cy", height / 2);
+const map_svg = d3.select(".map_svg");
+map_svg.style("background-color", "red");

@@ -142,3 +142,13 @@ footer p {
     top: 0;
   }
 }
+/* for map */
+.sphere {
+  fill: #4242e4;
+}
+
+.country {
+  fill: lightgreen;
+  stroke: black;
+  stroke-opacity: 0.1;
+}
