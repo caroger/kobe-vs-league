@@ -1,17 +1,40 @@
-const usURL =
-  "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json";
+const svg = d3.select(".canvas");
+const path = d3.geoPath();
 
-const canvas = d3.select(".canvas");
 
-const projection = d3.geoMercator();
-const pathGenerator = d3.geoPath().projection(projection);
-
-d3.json(usURL).then((data, error) => {
+d3.json("./data/counties-albers-10m.json").then((us, error) => {
   if (error) {
     console.log(error);
   } else {
-    console.log(data);
-    const states = topojson.feature(data, data.objects.states)
+    console.log(us);
+    svg
+      .append("g")
+      .attr("class", "states")
+      .selectAll("path")
+      .data(
+        topojson
+          .feature(us, us.objects.states)
+          .features.filter((d) => d.id !== "02" && d.id !== "15") //only display main 48 states
+      )
+      .enter()
+      .append("path")
+      .attr("d", path)
+      .attr("fill", "#fdb927")
+      .attr("stroke", "white")
+      .attr("stroke-width", 5);
+    console.log(topojson.feature(us, us.objects.states).features);
 
+    // svg
+    //   .append("path")
+    //   .attr("class", "state-borders")
+    //   .attr("stroke-width", 10)
+    //   .attr(
+    //     "d",
+    //     path(
+    //       topojson.mesh(us, us.objects.states, function (a, b) {
+    //         return a !== b;
+    //       })
+    //     )
+    //   );
   }
 });
