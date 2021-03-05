@@ -1,40 +1,28 @@
-const svg = d3.select(".canvas");
-const path = d3.geoPath();
+const width = 900;
+const height = 600;
+const svg = d3
+  .select(".visual")
+  .append("svg")
+  .attr("class", "map")
+  .attr("width", width)
+  .attr("height", height);
 
+const projection = d3.geoAlbersUsa();
+const path = d3.geoPath(projection);
 
-d3.json("./data/counties-albers-10m.json").then((us, error) => {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log(us);
-    svg
-      .append("g")
-      .attr("class", "states")
-      .selectAll("path")
-      .data(
-        topojson
-          .feature(us, us.objects.states)
-          .features.filter((d) => d.id !== "02" && d.id !== "15") //only display main 48 states
+d3.json("/data/us.json").then((data) => {
+  svg
+    .selectAll("path")
+    .data(
+      data.features.filter(
+        (d) => !["Alaska", "Hawaii"].includes(d.properties.NAME)
       )
-      .enter()
-      .append("path")
-      .attr("d", path)
-      .attr("fill", "#fdb927")
-      .attr("stroke", "white")
-      .attr("stroke-width", 5);
-    console.log(topojson.feature(us, us.objects.states).features);
-
-    // svg
-    //   .append("path")
-    //   .attr("class", "state-borders")
-    //   .attr("stroke-width", 10)
-    //   .attr(
-    //     "d",
-    //     path(
-    //       topojson.mesh(us, us.objects.states, function (a, b) {
-    //         return a !== b;
-    //       })
-    //     )
-    //   );
-  }
+    )
+    .enter()
+    .append("path")
+    .attr("class", "states")
+    .attr("d", path)
+    .attr("fill", "#fdb927") // base state color
+    .attr("stroke", "white") // white state border
+    .attr("stroke-width", 5); // state line width
 });
