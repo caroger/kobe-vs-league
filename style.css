@@ -145,12 +145,16 @@ footer p {
 
 .visual {
   height: 100vh;
-  /* width: 100%; */
+  width: 100%;
   display: block;
 }
 
 svg {
   background-color: whitesmoke;
+}
+
+.states:hover{
+  fill: #552583;
 }
 
 .canvas {
@@ -162,3 +166,4 @@ svg {
   min-width: 1000px;
   min-height: 600px;
 }
+k

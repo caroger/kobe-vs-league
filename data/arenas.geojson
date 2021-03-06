@@ -18,7 +18,8 @@
         "arena": "Wells Fargo Center",
         "marker-color": "#b4cadb",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/76ers-logo@logotyp.us.svg"
       }
     },
     {
@@ -38,7 +39,8 @@
         "arena": "TD Garden",
         "marker-color": "#b4cadb",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/boston-celtics-logo@logotyp.us.svg"
       }
     },
     {
@@ -58,7 +60,8 @@
         "arena": "Madison Square Garden",
         "marker-color": "#b4cadb",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/new-york-knicks-logo@logotyp.us.svg"
       }
     },
     {
@@ -78,7 +81,8 @@
         "arena": "Barclays Center",
         "marker-color": "#b4cadb",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/brooklyn-nets-logo@logotyp.us.svg"
       }
     },
     {
@@ -98,7 +102,8 @@
         "arena": "Air Canada Center",
         "marker-color": "#b4cadb",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/toronto-raptors-logo@logotyp.us.svg"
       }
     },
     {
@@ -118,7 +123,8 @@
         "arena": "Bradley Center",
         "marker-color": "#257aba",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/milwaukee-bucks-logo@logotyp.us.svg"
       }
     },
     {
@@ -138,7 +144,8 @@
         "arena": "United Center",
         "marker-color": "#257aba",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/chicago-bulls-logo@logotyp.us.svg"
       }
     },
     {
@@ -158,7 +165,8 @@
         "arena": "Quicken Loans Arena",
         "marker-color": "#257aba",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/cleveland-cavaliers-logo@logotyp.us.svg"
       }
     },
     {
@@ -178,7 +186,8 @@
         "arena": "Little Caesars Arena",
         "marker-color": "#257aba",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/detroit-pistons-logo@logotyp.us.svg"
       }
     },
     {
@@ -198,7 +207,8 @@
         "arena": "Bankers Life Fieldhouse",
         "marker-color": "#257aba",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/indiana-pacers-logo@logotyp.us.svg"
       }
     },
     {
@@ -218,7 +228,8 @@
         "arena": "Vivint Smart Home Arena",
         "marker-color": "#960000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/utah-jazz-logo@logotyp.us.svg"
       }
     },
     {
@@ -238,7 +249,8 @@
         "arena": "Chesapeake Arena",
         "marker-color": "#960000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/oklahoma-city-thunder-logo@logotyp.us.svg"
       }
     },
     {
@@ -258,7 +270,8 @@
         "arena": "Target Center",
         "marker-color": "#960000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/timberwolves-logo@logotyp.us.svg"
       }
     },
     {
@@ -278,7 +291,8 @@
         "arena": "Moda Center",
         "marker-color": "#960000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/portland-trail-blazers-logo@logotyp.us.svg"
       }
     },
     {
@@ -298,7 +312,8 @@
         "arena": "Pepsi Center",
         "marker-color": "#960000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/denver-nuggets-logo@logotyp.us.svg"
       }
     },
     {
@@ -318,7 +333,8 @@
         "arena": "Staples Center",
         "marker-color": "#c70000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/la-clippers-logo@logotyp.us.svg"
       }
     },
     {
@@ -338,27 +354,8 @@
         "arena": "Golden 1 Center",
         "marker-color": "#c70000",
         "marker-size": "medium",
-        "marker-symbol": ""
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -118.2673,
-          34.043
-        ]
-      },
-      "properties": {
-        "conference": "Western",
-        "division": "Pacific",
-        "team": "Lakers",
-        "city": "Los Angeles",
-        "arena": "Staples Center",
-        "marker-color": "#c70000",
-        "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/sacramento-kings-logo@logotyp.us.svg"
       }
     },
     {
@@ -378,7 +375,8 @@
         "arena": "Talking Stick Resort Arena",
         "marker-color": "#c70000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/phoenix-suns-logo@logotyp.us.svg"
       }
     },
     {
@@ -398,7 +396,8 @@
         "arena": "Oracle Arena",
         "marker-color": "#c70000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/warriors-logo@logotyp.us.svg"
       }
     },
     {
@@ -418,7 +417,8 @@
         "arena": "AmericanAirlines Arena",
         "marker-color": "#034e9e",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/washington-wizards-logo@logotyp.us.svg"
       }
     },
     {
@@ -438,7 +438,8 @@
         "arena": "Phillips Arena",
         "marker-color": "#034e9e",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/atlanta-hawks-logo@logotyp.us.svg"
       }
     },
     {
@@ -458,7 +459,8 @@
         "arena": "AmericanAirlines Arena",
         "marker-color": "#034e9e",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/miami-heat-logo@logotyp.us.svg"
       }
     },
     {
@@ -478,7 +480,8 @@
         "arena": "Spectrum Center",
         "marker-color": "#034e9e",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/charlotte-hornets-logo@logotyp.us.svg"
       }
     },
     {
@@ -498,7 +501,8 @@
         "arena": "Amway Center",
         "marker-color": "#034e9e",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/orlando-magic-logo@logotyp.us.svg"
       }
     },
     {
@@ -518,7 +522,9 @@
         "arena": "American Airlines Ceter",
         "marker-color": "#ff0000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/dallas-mavericks-logo@logotyp.us.svg"
+
       }
     },
     {
@@ -538,7 +544,8 @@
         "arena": "Smoothie King Center",
         "marker-color": "#ff0000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/pelicans-logo@logotyp.us.svg"
       }
     },
     {
@@ -578,7 +585,9 @@
         "arena": "AT&T Center",
         "marker-color": "#ff0000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/spurs-logo@logotyp.us.svg"
+
       }
     },
     {
@@ -598,7 +607,8 @@
         "arena": "Fedex Forum",
         "marker-color": "#ff0000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "../team_logo/memphis-grizzlies-logo@logotyp.us.svg"
       }
     }
   ]
