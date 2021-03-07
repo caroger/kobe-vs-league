@@ -19,7 +19,7 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/76ers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/76ers-logo@logotyp.us.svg"
       }
     },
     {
@@ -40,7 +40,7 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/boston-celtics-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/boston-celtics-logo@logotyp.us.svg"
       }
     },
     {
@@ -61,7 +61,7 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/new-york-knicks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/new-york-knicks-logo@logotyp.us.svg"
       }
     },
     {
@@ -82,7 +82,7 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/brooklyn-nets-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/brooklyn-nets-logo@logotyp.us.svg"
       }
     },
     {
@@ -103,7 +103,7 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/toronto-raptors-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/toronto-raptors-logo@logotyp.us.svg"
       }
     },
     {
@@ -124,7 +124,7 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/milwaukee-bucks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/milwaukee-bucks-logo@logotyp.us.svg"
       }
     },
     {
@@ -145,7 +145,7 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/chicago-bulls-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/chicago-bulls-logo@logotyp.us.svg"
       }
     },
     {
@@ -166,7 +166,7 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/cleveland-cavaliers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/cleveland-cavaliers-logo@logotyp.us.svg"
       }
     },
     {
@@ -187,7 +187,7 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/detroit-pistons-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/detroit-pistons-logo@logotyp.us.svg"
       }
     },
     {
@@ -208,7 +208,7 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/indiana-pacers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/indiana-pacers-logo@logotyp.us.svg"
       }
     },
     {
@@ -229,7 +229,7 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/utah-jazz-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/utah-jazz-logo@logotyp.us.svg"
       }
     },
     {
@@ -250,7 +250,7 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/oklahoma-city-thunder-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/oklahoma-city-thunder-logo@logotyp.us.svg"
       }
     },
     {
@@ -271,7 +271,7 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/timberwolves-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/timberwolves-logo@logotyp.us.svg"
       }
     },
     {
@@ -292,7 +292,7 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/portland-trail-blazers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/portland-trail-blazers-logo@logotyp.us.svg"
       }
     },
     {
@@ -313,7 +313,7 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/denver-nuggets-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/denver-nuggets-logo@logotyp.us.svg"
       }
     },
     {
@@ -334,7 +334,7 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/la-clippers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/la-clippers-logo@logotyp.us.svg"
       }
     },
     {
@@ -355,7 +355,7 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/sacramento-kings-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/sacramento-kings-logo@logotyp.us.svg"
       }
     },
     {
@@ -376,7 +376,7 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/phoenix-suns-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/phoenix-suns-logo@logotyp.us.svg"
       }
     },
     {
@@ -397,7 +397,7 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/warriors-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/warriors-logo@logotyp.us.svg"
       }
     },
     {
@@ -418,7 +418,7 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/washington-wizards-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/washington-wizards-logo@logotyp.us.svg"
       }
     },
     {
@@ -439,7 +439,7 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/atlanta-hawks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/atlanta-hawks-logo@logotyp.us.svg"
       }
     },
     {
@@ -460,7 +460,7 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/miami-heat-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/miami-heat-logo@logotyp.us.svg"
       }
     },
     {
@@ -481,7 +481,7 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/charlotte-hornets-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/charlotte-hornets-logo@logotyp.us.svg"
       }
     },
     {
@@ -502,7 +502,7 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/orlando-magic-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/orlando-magic-logo@logotyp.us.svg"
       }
     },
     {
@@ -523,7 +523,7 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/dallas-mavericks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/dallas-mavericks-logo@logotyp.us.svg"
 
       }
     },
@@ -545,7 +545,7 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/pelicans-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/pelicans-logo@logotyp.us.svg"
       }
     },
     {
@@ -586,7 +586,7 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/spurs-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/spurs-logo@logotyp.us.svg"
 
       }
     },
@@ -608,7 +608,7 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "../team_logo/memphis-grizzlies-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/memphis-grizzlies-logo@logotyp.us.svg"
       }
     }
   ]

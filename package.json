@@ -1,0 +1,20 @@
+{
+  "name": "kobe-vs-league",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "webpack --mode=development --watch"
+  },
+  "dependencies": {
+    "d3": "^5.6.0",
+    "topojson": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.8",
+    "@babel/preset-env": "^7.13.9",
+    "babel-loader": "^8.2.2",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.5.0"
+  }
+}

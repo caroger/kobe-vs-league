@@ -1,19 +1,19 @@
+import { select, geoAlbersUsa, geoPath, json, selectAll } from "d3";
+import { topojson } from "topojson";
+
 const width = 900;
 const height = 600;
-const svg = d3
-  .select(".visual")
+const svg = select(".visual")
   .append("svg")
   .attr("class", "map")
-  // .attr("width", width)
-  // .attr("height", height);
   .attr("preserveAspectRatio", "xMinYMin meet")
   .attr("viewBox", "0 0 960 500");
 
-const projection = d3.geoAlbersUsa();
-const path = d3.geoPath(projection);
-var tooltip = d3.select("image").append("div").attr("class", "hidden tooltip");
+const projection = geoAlbersUsa();
+const path = geoPath(projection);
+var tooltip = select("image").append("div").attr("class", "hidden tooltip");
 
-d3.json("/data/us.json").then((data) => {
+json("./assets/data/us.json").then((data) => {
   svg
     .selectAll("path")
     .data(
@@ -30,11 +30,10 @@ d3.json("/data/us.json").then((data) => {
     .attr("stroke-width", 5); // state line width
 
   //map team logo
-  d3.json("/data/arenas.geojson").then((data) => {
-    // console.log(topojson.feature(data, data));
+  json("./assets/data/arenas.geojson").then((data) => {
     let mouseOver = function (d) {
-      d3.selectAll("image").transition().duration(200).style("opacity", 0.5);
-      d3.select(this)
+      selectAll("image").transition().duration(200).style("opacity", 0.5);
+      select(this)
         .transition()
         .duration(200)
         .style("opacity", 1)
@@ -42,11 +41,10 @@ d3.json("/data/us.json").then((data) => {
     };
 
     let mouseLeave = function (d) {
-      d3.selectAll("image").transition().duration(200).style("opacity", 0.8);
-      d3.select(this).transition().duration(200).style("stroke", "transparent");
+      selectAll("image").transition().duration(200).style("opacity", 0.8);
+      select(this).transition().duration(200).style("stroke", "transparent");
     };
 
-    console.log(data.features);
     svg
       .selectAll("logo")
       .data(data.features)
