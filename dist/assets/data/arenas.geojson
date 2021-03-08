@@ -11,6 +11,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "PHI",
         "conference": "Eastern",
         "division": "Atlantic",
         "team": "76ers",
@@ -32,6 +33,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "BOS",
         "conference": "Eastern",
         "division": "Atlantic",
         "team": "Celtics",
@@ -53,6 +55,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "NYK",
         "conference": "Eastern",
         "division": "Atlantic",
         "team": "Knicks",
@@ -74,6 +77,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "BKN",
         "conference": "Eastern",
         "division": "Atlantic",
         "team": "Nets",
@@ -95,6 +99,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "TOR",
         "conference": "Eastern",
         "division": "Atlantic",
         "team": "Raptors",
@@ -116,6 +121,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "MIL",
         "conference": "Eastern",
         "division": "Central",
         "team": "Bucks",
@@ -137,6 +143,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "CHI",
         "conference": "Eastern",
         "division": "Central",
         "team": "Bulls",
@@ -158,6 +165,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "CLE",
         "conference": "Eastern",
         "division": "Central",
         "team": "Cavaliers",
@@ -179,6 +187,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "DET",
         "conference": "Eastern",
         "division": "Central",
         "team": "Pistons",
@@ -200,6 +209,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "IND",
         "conference": "Eastern",
         "division": "Central",
         "team": "Pacers",
@@ -221,6 +231,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "UTA",
         "conference": "Western",
         "division": "Northwest",
         "team": "Jazz",
@@ -242,6 +253,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "OKC",
         "conference": "Western",
         "division": "Northwest",
         "team": "Thunder",
@@ -263,6 +275,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "MIN",
         "conference": "Western",
         "division": "Northwest",
         "team": "Timberwolves",
@@ -284,6 +297,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "POR",
         "conference": "Western",
         "division": "Northwest",
         "team": "Trail Blazers",
@@ -305,6 +319,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "DEN",
         "conference": "Western",
         "division": "Northwest",
         "team": "Nuggets",
@@ -326,6 +341,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "LAC",
         "conference": "Western",
         "division": "Pacific",
         "team": "Clippers",
@@ -347,6 +363,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "SAC",
         "conference": "Western",
         "division": "Pacific",
         "team": "Kings",
@@ -368,6 +385,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "PHX",
         "conference": "Western",
         "division": "Pacific",
         "team": "Suns",
@@ -389,6 +407,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "GSW",
         "conference": "Western",
         "division": "Pacific",
         "team": "Warriors",
@@ -410,9 +429,10 @@
         ]
       },
       "properties": {
+        "abbreviation": "WAS",
         "conference": "Eastern",
         "division": "Southeast",
-        "team": "Capital One Arena",
+        "team": "Wizards",
         "city": "Washington",
         "arena": "AmericanAirlines Arena",
         "marker-color": "#034e9e",
@@ -431,6 +451,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "ATL",
         "conference": "Eastern",
         "division": "Southeast",
         "team": "Hawks",
@@ -452,6 +473,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "MIA",
         "conference": "Eastern",
         "division": "Southeast",
         "team": "Heat",
@@ -473,6 +495,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "CHA",
         "conference": "Eastern",
         "division": "Southeast",
         "team": "Hornets",
@@ -494,6 +517,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "ORL",
         "conference": "Eastern",
         "division": "Southeast",
         "team": "Magic",
@@ -515,6 +539,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "DAL",
         "conference": "Western",
         "division": "Southwest",
         "team": "Mavericks",
@@ -524,7 +549,6 @@
         "marker-size": "medium",
         "marker-symbol": "",
         "logo_url": "assets/team_logo/dallas-mavericks-logo@logotyp.us.svg"
-
       }
     },
     {
@@ -537,6 +561,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "NOP",
         "conference": "Western",
         "division": "Southwest",
         "team": "Pelicans",
@@ -558,6 +583,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "HOU",
         "conference": "Western",
         "division": "Southwest",
         "team": "Rockets",
@@ -578,6 +604,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "SAS",
         "conference": "Western",
         "division": "Southwest",
         "team": "Spurs",
@@ -587,7 +614,6 @@
         "marker-size": "medium",
         "marker-symbol": "",
         "logo_url": "assets/team_logo/spurs-logo@logotyp.us.svg"
-
       }
     },
     {
@@ -600,6 +626,7 @@
         ]
       },
       "properties": {
+        "abbreviation": "MEM",
         "conference": "Western",
         "division": "Southwest",
         "team": "Grizzlies",
