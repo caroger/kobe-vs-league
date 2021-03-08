@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "homepage": "https://caroger.github.io/kobe-vs-league/",
   "scripts": {
-    "dev": "webpack --mode=development --watch"
+    "build": "webpack --mode=development --watch",
+    "pages": "gh-pages -d dist",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "d3": "^5.6.0",
