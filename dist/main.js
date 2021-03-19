@@ -25210,6 +25210,352 @@ function sleep(time) {
 
 /***/ }),
 
+/***/ "./node_modules/d3-tip/index.js":
+/*!**************************************!*\
+  !*** ./node_modules/d3-tip/index.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var d3_collection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-collection */ "./node_modules/d3-collection/src/index.js");
+/* harmony import */ var d3_selection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/src/index.js");
+/**
+ * d3.tip
+ * Copyright (c) 2013-2017 Justin Palmer
+ *
+ * Tooltips for d3.js SVG visualizations
+ */
+// eslint-disable-next-line no-extra-semi
+
+
+// Public - constructs a new tooltip
+//
+// Returns a tip
+/* harmony default export */ __webpack_exports__["default"] = (function() {
+  var direction   = d3TipDirection,
+      offset      = d3TipOffset,
+      html        = d3TipHTML,
+      rootElement = document.body,
+      node        = initNode(),
+      svg         = null,
+      point       = null,
+      target      = null
+
+  function tip(vis) {
+    svg = getSVGNode(vis)
+    if (!svg) return
+    point = svg.createSVGPoint()
+    rootElement.appendChild(node)
+  }
+
+  // Public - show the tooltip on the screen
+  //
+  // Returns a tip
+  tip.show = function() {
+    var args = Array.prototype.slice.call(arguments)
+    if (args[args.length - 1] instanceof SVGElement) target = args.pop()
+
+    var content = html.apply(this, args),
+        poffset = offset.apply(this, args),
+        dir     = direction.apply(this, args),
+        nodel   = getNodeEl(),
+        i       = directions.length,
+        coords,
+        scrollTop  = document.documentElement.scrollTop ||
+      rootElement.scrollTop,
+        scrollLeft = document.documentElement.scrollLeft ||
+      rootElement.scrollLeft
+
+    nodel.html(content)
+      .style('opacity', 1).style('pointer-events', 'all')
+
+    while (i--) nodel.classed(directions[i], false)
+    coords = directionCallbacks.get(dir).apply(this)
+    nodel.classed(dir, true)
+      .style('top', (coords.top + poffset[0]) + scrollTop + 'px')
+      .style('left', (coords.left + poffset[1]) + scrollLeft + 'px')
+
+    return tip
+  }
+
+  // Public - hide the tooltip
+  //
+  // Returns a tip
+  tip.hide = function() {
+    var nodel = getNodeEl()
+    nodel.style('opacity', 0).style('pointer-events', 'none')
+    return tip
+  }
+
+  // Public: Proxy attr calls to the d3 tip container.
+  // Sets or gets attribute value.
+  //
+  // n - name of the attribute
+  // v - value of the attribute
+  //
+  // Returns tip or attribute value
+  // eslint-disable-next-line no-unused-vars
+  tip.attr = function(n, v) {
+    if (arguments.length < 2 && typeof n === 'string') {
+      return getNodeEl().attr(n)
+    }
+
+    var args =  Array.prototype.slice.call(arguments)
+    d3_selection__WEBPACK_IMPORTED_MODULE_1__["selection"].prototype.attr.apply(getNodeEl(), args)
+    return tip
+  }
+
+  // Public: Proxy style calls to the d3 tip container.
+  // Sets or gets a style value.
+  //
+  // n - name of the property
+  // v - value of the property
+  //
+  // Returns tip or style property value
+  // eslint-disable-next-line no-unused-vars
+  tip.style = function(n, v) {
+    if (arguments.length < 2 && typeof n === 'string') {
+      return getNodeEl().style(n)
+    }
+
+    var args = Array.prototype.slice.call(arguments)
+    d3_selection__WEBPACK_IMPORTED_MODULE_1__["selection"].prototype.style.apply(getNodeEl(), args)
+    return tip
+  }
+
+  // Public: Set or get the direction of the tooltip
+  //
+  // v - One of n(north), s(south), e(east), or w(west), nw(northwest),
+  //     sw(southwest), ne(northeast) or se(southeast)
+  //
+  // Returns tip or direction
+  tip.direction = function(v) {
+    if (!arguments.length) return direction
+    direction = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: Sets or gets the offset of the tip
+  //
+  // v - Array of [x, y] offset
+  //
+  // Returns offset or
+  tip.offset = function(v) {
+    if (!arguments.length) return offset
+    offset = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: sets or gets the html value of the tooltip
+  //
+  // v - String value of the tip
+  //
+  // Returns html value or tip
+  tip.html = function(v) {
+    if (!arguments.length) return html
+    html = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: sets or gets the root element anchor of the tooltip
+  //
+  // v - root element of the tooltip
+  //
+  // Returns root node of tip
+  tip.rootElement = function(v) {
+    if (!arguments.length) return rootElement
+    rootElement = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: destroys the tooltip and removes it from the DOM
+  //
+  // Returns a tip
+  tip.destroy = function() {
+    if (node) {
+      getNodeEl().remove()
+      node = null
+    }
+    return tip
+  }
+
+  function d3TipDirection() { return 'n' }
+  function d3TipOffset() { return [0, 0] }
+  function d3TipHTML() { return ' ' }
+
+  var directionCallbacks = Object(d3_collection__WEBPACK_IMPORTED_MODULE_0__["map"])({
+        n:  directionNorth,
+        s:  directionSouth,
+        e:  directionEast,
+        w:  directionWest,
+        nw: directionNorthWest,
+        ne: directionNorthEast,
+        sw: directionSouthWest,
+        se: directionSouthEast
+      }),
+      directions = directionCallbacks.keys()
+
+  function directionNorth() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.n.y - node.offsetHeight,
+      left: bbox.n.x - node.offsetWidth / 2
+    }
+  }
+
+  function directionSouth() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.s.y,
+      left: bbox.s.x - node.offsetWidth / 2
+    }
+  }
+
+  function directionEast() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.e.y - node.offsetHeight / 2,
+      left: bbox.e.x
+    }
+  }
+
+  function directionWest() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.w.y - node.offsetHeight / 2,
+      left: bbox.w.x - node.offsetWidth
+    }
+  }
+
+  function directionNorthWest() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.nw.y - node.offsetHeight,
+      left: bbox.nw.x - node.offsetWidth
+    }
+  }
+
+  function directionNorthEast() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.ne.y - node.offsetHeight,
+      left: bbox.ne.x
+    }
+  }
+
+  function directionSouthWest() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.sw.y,
+      left: bbox.sw.x - node.offsetWidth
+    }
+  }
+
+  function directionSouthEast() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.se.y,
+      left: bbox.se.x
+    }
+  }
+
+  function initNode() {
+    var div = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["select"])(document.createElement('div'))
+    div
+      .style('position', 'absolute')
+      .style('top', 0)
+      .style('opacity', 0)
+      .style('pointer-events', 'none')
+      .style('box-sizing', 'border-box')
+
+    return div.node()
+  }
+
+  function getSVGNode(element) {
+    var svgNode = element.node()
+    if (!svgNode) return null
+    if (svgNode.tagName.toLowerCase() === 'svg') return svgNode
+    return svgNode.ownerSVGElement
+  }
+
+  function getNodeEl() {
+    if (node == null) {
+      node = initNode()
+      // re-add node to DOM
+      rootElement.appendChild(node)
+    }
+    return Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["select"])(node)
+  }
+
+  // Private - gets the screen coordinates of a shape
+  //
+  // Given a shape on the screen, will return an SVGPoint for the directions
+  // n(north), s(south), e(east), w(west), ne(northeast), se(southeast),
+  // nw(northwest), sw(southwest).
+  //
+  //    +-+-+
+  //    |   |
+  //    +   +
+  //    |   |
+  //    +-+-+
+  //
+  // Returns an Object {n, s, e, w, nw, sw, ne, se}
+  function getScreenBBox(targetShape) {
+    var targetel   = target || targetShape
+
+    while (targetel.getScreenCTM == null && targetel.parentNode != null) {
+      targetel = targetel.parentNode
+    }
+
+    var bbox       = {},
+        matrix     = targetel.getScreenCTM(),
+        tbbox      = targetel.getBBox(),
+        width      = tbbox.width,
+        height     = tbbox.height,
+        x          = tbbox.x,
+        y          = tbbox.y
+
+    point.x = x
+    point.y = y
+    bbox.nw = point.matrixTransform(matrix)
+    point.x += width
+    bbox.ne = point.matrixTransform(matrix)
+    point.y += height
+    bbox.se = point.matrixTransform(matrix)
+    point.x -= width
+    bbox.sw = point.matrixTransform(matrix)
+    point.y -= height / 2
+    bbox.w = point.matrixTransform(matrix)
+    point.x += width
+    bbox.e = point.matrixTransform(matrix)
+    point.x -= width / 2
+    point.y -= height / 2
+    bbox.n = point.matrixTransform(matrix)
+    point.y += height
+    bbox.s = point.matrixTransform(matrix)
+
+    return bbox
+  }
+
+  // Private - replace D3JS 3.X d3.functor() function
+  function functor(v) {
+    return typeof v === 'function' ? v : function() {
+      return v
+    }
+  }
+
+  return tip
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/d3-transition/src/active.js":
 /*!**************************************************!*\
   !*** ./node_modules/d3-transition/src/active.js ***!
@@ -29498,6 +29844,137 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+/* harmony import */ var d3_tip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-tip */ "./node_modules/d3-tip/index.js");
+/* harmony import */ var _loadData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./loadData */ "./src/loadData.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+ // load data
+// let geoData;
+// let arenaData;
+
+Object(_loadData__WEBPACK_IMPORTED_MODULE_2__["loadMapData"])().then(function (data) {
+  var geoData = data.geoData,
+      arenaData = data.arenaData;
+  console.log(geoData);
+  console.log(arenaData);
+});
+
+var d3 = _objectSpread(_objectSpread({}, d3__WEBPACK_IMPORTED_MODULE_0__), {}, {
+  tip: d3_tip__WEBPACK_IMPORTED_MODULE_1__["default"]
+}); // import { loadMapData } from "./loadData";
+// import $ from "jquery";
+
+
+var width = 900;
+var height = 600;
+var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map"); // .attr("width", width)
+// .attr("height", height)
+// .attr("preserveAspectRatio", "xMinYMin meet")
+// .attr("viewBox", "0 0 960 600");
+
+var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
+var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection); // Helper functions with mouseOver effects
+
+var mouseOver = function mouseOver(d) {
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.5);
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
+  console.log(d);
+};
+
+var mouseLeave = function mouseLeave(d) {
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.8);
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(100).style("stroke", "transparent");
+}; // initialize tip
+
+
+var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
+  return "".concat(d.properties.abbreviation);
+});
+Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["csv"])("./assets/data/game_stats.csv")]).then(function (_ref) {
+  var _ref2 = _slicedToArray(_ref, 3),
+      mapData = _ref2[0],
+      arenaData = _ref2[1],
+      gameData = _ref2[2];
+
+  mapSvg.selectAll("path").data(mapData.features.filter(function (d) {
+    return !["Alaska", "Hawaii"].includes(d.properties.NAME);
+  })).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "#fdb927") // base state color
+  .attr("stroke", "white") // white state border
+  .attr("stroke-width", 5); // state line width
+
+  mapSvg.call(tip);
+  mapSvg.selectAll("logo").data(arenaData.features).enter().append("svg:image").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
+    return projection(d.geometry.coordinates)[0] - width / 10 / 2;
+  }).attr("y", function (d) {
+    return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
+  }).attr("xlink:href", function (d) {
+    return d.properties.logo_url;
+  }).on("mouseover", mouseOver).on("mouseleave", mouseLeave).on("mouseover", tip.show).on("mouseout", tip.hide);
+}); // const renderTable = (team) => {
+//   var table = d3.select(".table-container").append("table");
+//   var thead = table.append("thead");
+//   var tbody = table.append("tbody");
+//   // append the header row
+//   thead
+//     .append("tr")
+//     .selectAll("th")
+//     .data(columns)
+//     .enter()
+//     .append("th")
+//     .text(function (column) {
+//       return column;
+//     });
+//   // create a row for each object in the data
+//   var rows = tbody.selectAll("tr").data(data).enter().append("tr");
+//   // create a cell in each row for each column
+//   var cells = rows
+//     .selectAll("td")
+//     .data(function (row) {
+//       return columns.map(function (column) {
+//         return { column: column, value: row[column] };
+//       });
+//     })
+//     .enter()
+//     .append("td")
+//     .text(function (d) {
+//       return d.value;
+//     });
+//   return table;
+// };
+// renderTable("LAL");
+
+/***/ }),
+
+/***/ "./src/loadData.js":
+/*!*************************!*\
+  !*** ./src/loadData.js ***!
+  \*************************/
+/*! exports provided: loadMapData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadMapData", function() { return loadMapData; });
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -29511,49 +29988,24 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-var width = 900;
-var height = 600;
-var svg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".visual").append("svg").attr("class", "map").attr("preserveAspectRatio", "xMinYMin meet").attr("viewBox", "0 0 960 500");
-var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
-var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection); // Helper functions with mouseOver effects
+var loadMapData = function loadMapData() {
+  var geoData;
+  var arenaData;
+  return Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson")]).then(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        d1 = _ref2[0],
+        d2 = _ref2[1];
 
-var mouseOver = function mouseOver(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.5);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
+    geoData = d1.features.filter(function (d) {
+      return !["Alaska", "Hawaii"].includes(d.properties.NAME);
+    });
+    arenaData = d2.features;
+    return {
+      geoData: geoData,
+      arenaData: arenaData
+    };
+  });
 };
-
-var mouseLeave = function mouseLeave(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.8);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(100).style("stroke", "transparent");
-};
-
-Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["csv"])("./assets/data/game_stats.csv")]).then(function (_ref) {
-  var _ref2 = _slicedToArray(_ref, 3),
-      mapData = _ref2[0],
-      arenaData = _ref2[1],
-      gameData = _ref2[2];
-
-  var gamesByOpponents = gameData.reduce(function (r, a) {
-    r[a.OPPONENTS] = r[a.OPPONENTS] || [];
-    r[a.OPPONENTS].push(a);
-    return r;
-  }, Object.create(null));
-  console.log(gameData);
-  console.log(gamesByOpponents["ATL"]);
-  svg.selectAll("path").data(mapData.features.filter(function (d) {
-    return !["Alaska", "Hawaii"].includes(d.properties.NAME);
-  })).enter().append("path").attr("class", "states").attr("d", path).attr("fill", "#fdb927") // base state color
-  .attr("stroke", "white") // white state border
-  .attr("stroke-width", 5); // state line width
-
-  svg.selectAll("logo").data(arenaData.features).enter().append("svg:image").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
-    return projection(d.geometry.coordinates)[0] - width / 10 / 2;
-  }).attr("y", function (d) {
-    return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
-  }).attr("xlink:href", function (d) {
-    return d.properties.logo_url;
-  }).on("mouseover", mouseOver).on("mouseleave", mouseLeave);
-});
 
 /***/ })
 
