@@ -25210,6 +25210,352 @@ function sleep(time) {
 
 /***/ }),
 
+/***/ "./node_modules/d3-tip/index.js":
+/*!**************************************!*\
+  !*** ./node_modules/d3-tip/index.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var d3_collection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3-collection */ "./node_modules/d3-collection/src/index.js");
+/* harmony import */ var d3_selection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-selection */ "./node_modules/d3-selection/src/index.js");
+/**
+ * d3.tip
+ * Copyright (c) 2013-2017 Justin Palmer
+ *
+ * Tooltips for d3.js SVG visualizations
+ */
+// eslint-disable-next-line no-extra-semi
+
+
+// Public - constructs a new tooltip
+//
+// Returns a tip
+/* harmony default export */ __webpack_exports__["default"] = (function() {
+  var direction   = d3TipDirection,
+      offset      = d3TipOffset,
+      html        = d3TipHTML,
+      rootElement = document.body,
+      node        = initNode(),
+      svg         = null,
+      point       = null,
+      target      = null
+
+  function tip(vis) {
+    svg = getSVGNode(vis)
+    if (!svg) return
+    point = svg.createSVGPoint()
+    rootElement.appendChild(node)
+  }
+
+  // Public - show the tooltip on the screen
+  //
+  // Returns a tip
+  tip.show = function() {
+    var args = Array.prototype.slice.call(arguments)
+    if (args[args.length - 1] instanceof SVGElement) target = args.pop()
+
+    var content = html.apply(this, args),
+        poffset = offset.apply(this, args),
+        dir     = direction.apply(this, args),
+        nodel   = getNodeEl(),
+        i       = directions.length,
+        coords,
+        scrollTop  = document.documentElement.scrollTop ||
+      rootElement.scrollTop,
+        scrollLeft = document.documentElement.scrollLeft ||
+      rootElement.scrollLeft
+
+    nodel.html(content)
+      .style('opacity', 1).style('pointer-events', 'all')
+
+    while (i--) nodel.classed(directions[i], false)
+    coords = directionCallbacks.get(dir).apply(this)
+    nodel.classed(dir, true)
+      .style('top', (coords.top + poffset[0]) + scrollTop + 'px')
+      .style('left', (coords.left + poffset[1]) + scrollLeft + 'px')
+
+    return tip
+  }
+
+  // Public - hide the tooltip
+  //
+  // Returns a tip
+  tip.hide = function() {
+    var nodel = getNodeEl()
+    nodel.style('opacity', 0).style('pointer-events', 'none')
+    return tip
+  }
+
+  // Public: Proxy attr calls to the d3 tip container.
+  // Sets or gets attribute value.
+  //
+  // n - name of the attribute
+  // v - value of the attribute
+  //
+  // Returns tip or attribute value
+  // eslint-disable-next-line no-unused-vars
+  tip.attr = function(n, v) {
+    if (arguments.length < 2 && typeof n === 'string') {
+      return getNodeEl().attr(n)
+    }
+
+    var args =  Array.prototype.slice.call(arguments)
+    d3_selection__WEBPACK_IMPORTED_MODULE_1__["selection"].prototype.attr.apply(getNodeEl(), args)
+    return tip
+  }
+
+  // Public: Proxy style calls to the d3 tip container.
+  // Sets or gets a style value.
+  //
+  // n - name of the property
+  // v - value of the property
+  //
+  // Returns tip or style property value
+  // eslint-disable-next-line no-unused-vars
+  tip.style = function(n, v) {
+    if (arguments.length < 2 && typeof n === 'string') {
+      return getNodeEl().style(n)
+    }
+
+    var args = Array.prototype.slice.call(arguments)
+    d3_selection__WEBPACK_IMPORTED_MODULE_1__["selection"].prototype.style.apply(getNodeEl(), args)
+    return tip
+  }
+
+  // Public: Set or get the direction of the tooltip
+  //
+  // v - One of n(north), s(south), e(east), or w(west), nw(northwest),
+  //     sw(southwest), ne(northeast) or se(southeast)
+  //
+  // Returns tip or direction
+  tip.direction = function(v) {
+    if (!arguments.length) return direction
+    direction = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: Sets or gets the offset of the tip
+  //
+  // v - Array of [x, y] offset
+  //
+  // Returns offset or
+  tip.offset = function(v) {
+    if (!arguments.length) return offset
+    offset = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: sets or gets the html value of the tooltip
+  //
+  // v - String value of the tip
+  //
+  // Returns html value or tip
+  tip.html = function(v) {
+    if (!arguments.length) return html
+    html = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: sets or gets the root element anchor of the tooltip
+  //
+  // v - root element of the tooltip
+  //
+  // Returns root node of tip
+  tip.rootElement = function(v) {
+    if (!arguments.length) return rootElement
+    rootElement = v == null ? v : functor(v)
+
+    return tip
+  }
+
+  // Public: destroys the tooltip and removes it from the DOM
+  //
+  // Returns a tip
+  tip.destroy = function() {
+    if (node) {
+      getNodeEl().remove()
+      node = null
+    }
+    return tip
+  }
+
+  function d3TipDirection() { return 'n' }
+  function d3TipOffset() { return [0, 0] }
+  function d3TipHTML() { return ' ' }
+
+  var directionCallbacks = Object(d3_collection__WEBPACK_IMPORTED_MODULE_0__["map"])({
+        n:  directionNorth,
+        s:  directionSouth,
+        e:  directionEast,
+        w:  directionWest,
+        nw: directionNorthWest,
+        ne: directionNorthEast,
+        sw: directionSouthWest,
+        se: directionSouthEast
+      }),
+      directions = directionCallbacks.keys()
+
+  function directionNorth() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.n.y - node.offsetHeight,
+      left: bbox.n.x - node.offsetWidth / 2
+    }
+  }
+
+  function directionSouth() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.s.y,
+      left: bbox.s.x - node.offsetWidth / 2
+    }
+  }
+
+  function directionEast() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.e.y - node.offsetHeight / 2,
+      left: bbox.e.x
+    }
+  }
+
+  function directionWest() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.w.y - node.offsetHeight / 2,
+      left: bbox.w.x - node.offsetWidth
+    }
+  }
+
+  function directionNorthWest() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.nw.y - node.offsetHeight,
+      left: bbox.nw.x - node.offsetWidth
+    }
+  }
+
+  function directionNorthEast() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.ne.y - node.offsetHeight,
+      left: bbox.ne.x
+    }
+  }
+
+  function directionSouthWest() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.sw.y,
+      left: bbox.sw.x - node.offsetWidth
+    }
+  }
+
+  function directionSouthEast() {
+    var bbox = getScreenBBox(this)
+    return {
+      top:  bbox.se.y,
+      left: bbox.se.x
+    }
+  }
+
+  function initNode() {
+    var div = Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["select"])(document.createElement('div'))
+    div
+      .style('position', 'absolute')
+      .style('top', 0)
+      .style('opacity', 0)
+      .style('pointer-events', 'none')
+      .style('box-sizing', 'border-box')
+
+    return div.node()
+  }
+
+  function getSVGNode(element) {
+    var svgNode = element.node()
+    if (!svgNode) return null
+    if (svgNode.tagName.toLowerCase() === 'svg') return svgNode
+    return svgNode.ownerSVGElement
+  }
+
+  function getNodeEl() {
+    if (node == null) {
+      node = initNode()
+      // re-add node to DOM
+      rootElement.appendChild(node)
+    }
+    return Object(d3_selection__WEBPACK_IMPORTED_MODULE_1__["select"])(node)
+  }
+
+  // Private - gets the screen coordinates of a shape
+  //
+  // Given a shape on the screen, will return an SVGPoint for the directions
+  // n(north), s(south), e(east), w(west), ne(northeast), se(southeast),
+  // nw(northwest), sw(southwest).
+  //
+  //    +-+-+
+  //    |   |
+  //    +   +
+  //    |   |
+  //    +-+-+
+  //
+  // Returns an Object {n, s, e, w, nw, sw, ne, se}
+  function getScreenBBox(targetShape) {
+    var targetel   = target || targetShape
+
+    while (targetel.getScreenCTM == null && targetel.parentNode != null) {
+      targetel = targetel.parentNode
+    }
+
+    var bbox       = {},
+        matrix     = targetel.getScreenCTM(),
+        tbbox      = targetel.getBBox(),
+        width      = tbbox.width,
+        height     = tbbox.height,
+        x          = tbbox.x,
+        y          = tbbox.y
+
+    point.x = x
+    point.y = y
+    bbox.nw = point.matrixTransform(matrix)
+    point.x += width
+    bbox.ne = point.matrixTransform(matrix)
+    point.y += height
+    bbox.se = point.matrixTransform(matrix)
+    point.x -= width
+    bbox.sw = point.matrixTransform(matrix)
+    point.y -= height / 2
+    bbox.w = point.matrixTransform(matrix)
+    point.x += width
+    bbox.e = point.matrixTransform(matrix)
+    point.x -= width / 2
+    point.y -= height / 2
+    bbox.n = point.matrixTransform(matrix)
+    point.y += height
+    bbox.s = point.matrixTransform(matrix)
+
+    return bbox
+  }
+
+  // Private - replace D3JS 3.X d3.functor() function
+  function functor(v) {
+    return typeof v === 'function' ? v : function() {
+      return v
+    }
+  }
+
+  return tip
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/d3-transition/src/active.js":
 /*!**************************************************!*\
   !*** ./node_modules/d3-transition/src/active.js ***!
@@ -29488,2496 +29834,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/topojson/index.js":
-/*!****************************************!*\
-  !*** ./node_modules/topojson/index.js ***!
-  \****************************************/
-/*! exports provided: bbox, feature, mesh, meshArcs, merge, mergeArcs, neighbors, quantize, transform, untransform, topology, filter, filterAttached, filterAttachedWeight, filterWeight, planarRingArea, planarTriangleArea, presimplify, quantile, simplify, sphericalRingArea, sphericalTriangleArea */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var topojson_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! topojson-client */ "./node_modules/topojson/node_modules/topojson-client/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "bbox", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["bbox"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "feature", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["feature"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "mesh", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["mesh"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "meshArcs", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["meshArcs"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "merge", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["merge"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "mergeArcs", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["mergeArcs"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "neighbors", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["neighbors"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "quantize", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["quantize"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "transform", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["transform"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "untransform", function() { return topojson_client__WEBPACK_IMPORTED_MODULE_0__["untransform"]; });
-
-/* harmony import */ var topojson_server__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! topojson-server */ "./node_modules/topojson/node_modules/topojson-server/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "topology", function() { return topojson_server__WEBPACK_IMPORTED_MODULE_1__["topology"]; });
-
-/* harmony import */ var topojson_simplify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! topojson-simplify */ "./node_modules/topojson/node_modules/topojson-simplify/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filter", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["filter"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filterAttached", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["filterAttached"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filterAttachedWeight", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["filterAttachedWeight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filterWeight", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["filterWeight"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "planarRingArea", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["planarRingArea"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "planarTriangleArea", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["planarTriangleArea"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "presimplify", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["presimplify"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "quantile", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["quantile"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "simplify", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["simplify"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "sphericalRingArea", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["sphericalRingArea"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "sphericalTriangleArea", function() { return topojson_simplify__WEBPACK_IMPORTED_MODULE_2__["sphericalTriangleArea"]; });
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/index.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/index.js ***!
-  \*********************************************************************/
-/*! exports provided: bbox, feature, mesh, meshArcs, merge, mergeArcs, neighbors, quantize, transform, untransform */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_bbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/bbox */ "./node_modules/topojson/node_modules/topojson-client/src/bbox.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "bbox", function() { return _src_bbox__WEBPACK_IMPORTED_MODULE_0__["default"]; });
-
-/* harmony import */ var _src_feature__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/feature */ "./node_modules/topojson/node_modules/topojson-client/src/feature.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "feature", function() { return _src_feature__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony import */ var _src_mesh__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/mesh */ "./node_modules/topojson/node_modules/topojson-client/src/mesh.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "mesh", function() { return _src_mesh__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "meshArcs", function() { return _src_mesh__WEBPACK_IMPORTED_MODULE_2__["meshArcs"]; });
-
-/* harmony import */ var _src_merge__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/merge */ "./node_modules/topojson/node_modules/topojson-client/src/merge.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "merge", function() { return _src_merge__WEBPACK_IMPORTED_MODULE_3__["default"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "mergeArcs", function() { return _src_merge__WEBPACK_IMPORTED_MODULE_3__["mergeArcs"]; });
-
-/* harmony import */ var _src_neighbors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/neighbors */ "./node_modules/topojson/node_modules/topojson-client/src/neighbors.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "neighbors", function() { return _src_neighbors__WEBPACK_IMPORTED_MODULE_4__["default"]; });
-
-/* harmony import */ var _src_quantize__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./src/quantize */ "./node_modules/topojson/node_modules/topojson-client/src/quantize.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "quantize", function() { return _src_quantize__WEBPACK_IMPORTED_MODULE_5__["default"]; });
-
-/* harmony import */ var _src_transform__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./src/transform */ "./node_modules/topojson/node_modules/topojson-client/src/transform.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "transform", function() { return _src_transform__WEBPACK_IMPORTED_MODULE_6__["default"]; });
-
-/* harmony import */ var _src_untransform__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./src/untransform */ "./node_modules/topojson/node_modules/topojson-client/src/untransform.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "untransform", function() { return _src_untransform__WEBPACK_IMPORTED_MODULE_7__["default"]; });
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/bbox.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/bbox.js ***!
-  \************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _transform__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./transform */ "./node_modules/topojson/node_modules/topojson-client/src/transform.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  var t = Object(_transform__WEBPACK_IMPORTED_MODULE_0__["default"])(topology.transform), key,
-      x0 = Infinity, y0 = x0, x1 = -x0, y1 = -x0;
-
-  function bboxPoint(p) {
-    p = t(p);
-    if (p[0] < x0) x0 = p[0];
-    if (p[0] > x1) x1 = p[0];
-    if (p[1] < y0) y0 = p[1];
-    if (p[1] > y1) y1 = p[1];
-  }
-
-  function bboxGeometry(o) {
-    switch (o.type) {
-      case "GeometryCollection": o.geometries.forEach(bboxGeometry); break;
-      case "Point": bboxPoint(o.coordinates); break;
-      case "MultiPoint": o.coordinates.forEach(bboxPoint); break;
-    }
-  }
-
-  topology.arcs.forEach(function(arc) {
-    var i = -1, n = arc.length, p;
-    while (++i < n) {
-      p = t(arc[i], i);
-      if (p[0] < x0) x0 = p[0];
-      if (p[0] > x1) x1 = p[0];
-      if (p[1] < y0) y0 = p[1];
-      if (p[1] > y1) y1 = p[1];
-    }
-  });
-
-  for (key in topology.objects) {
-    bboxGeometry(topology.objects[key]);
-  }
-
-  return [x0, y0, x1, y1];
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/bisect.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/bisect.js ***!
-  \**************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(a, x) {
-  var lo = 0, hi = a.length;
-  while (lo < hi) {
-    var mid = lo + hi >>> 1;
-    if (a[mid] < x) lo = mid + 1;
-    else hi = mid;
-  }
-  return lo;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/feature.js":
-/*!***************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/feature.js ***!
-  \***************************************************************************/
-/*! exports provided: default, feature, object */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "feature", function() { return feature; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "object", function() { return object; });
-/* harmony import */ var _reverse__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./reverse */ "./node_modules/topojson/node_modules/topojson-client/src/reverse.js");
-/* harmony import */ var _transform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./transform */ "./node_modules/topojson/node_modules/topojson-client/src/transform.js");
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, o) {
-  return o.type === "GeometryCollection"
-      ? {type: "FeatureCollection", features: o.geometries.map(function(o) { return feature(topology, o); })}
-      : feature(topology, o);
-});
-
-function feature(topology, o) {
-  var id = o.id,
-      bbox = o.bbox,
-      properties = o.properties == null ? {} : o.properties,
-      geometry = object(topology, o);
-  return id == null && bbox == null ? {type: "Feature", properties: properties, geometry: geometry}
-      : bbox == null ? {type: "Feature", id: id, properties: properties, geometry: geometry}
-      : {type: "Feature", id: id, bbox: bbox, properties: properties, geometry: geometry};
-}
-
-function object(topology, o) {
-  var transformPoint = Object(_transform__WEBPACK_IMPORTED_MODULE_1__["default"])(topology.transform),
-      arcs = topology.arcs;
-
-  function arc(i, points) {
-    if (points.length) points.pop();
-    for (var a = arcs[i < 0 ? ~i : i], k = 0, n = a.length; k < n; ++k) {
-      points.push(transformPoint(a[k], k));
-    }
-    if (i < 0) Object(_reverse__WEBPACK_IMPORTED_MODULE_0__["default"])(points, n);
-  }
-
-  function point(p) {
-    return transformPoint(p);
-  }
-
-  function line(arcs) {
-    var points = [];
-    for (var i = 0, n = arcs.length; i < n; ++i) arc(arcs[i], points);
-    if (points.length < 2) points.push(points[0]); // This should never happen per the specification.
-    return points;
-  }
-
-  function ring(arcs) {
-    var points = line(arcs);
-    while (points.length < 4) points.push(points[0]); // This may happen if an arc has only two points.
-    return points;
-  }
-
-  function polygon(arcs) {
-    return arcs.map(ring);
-  }
-
-  function geometry(o) {
-    var type = o.type, coordinates;
-    switch (type) {
-      case "GeometryCollection": return {type: type, geometries: o.geometries.map(geometry)};
-      case "Point": coordinates = point(o.coordinates); break;
-      case "MultiPoint": coordinates = o.coordinates.map(point); break;
-      case "LineString": coordinates = line(o.arcs); break;
-      case "MultiLineString": coordinates = o.arcs.map(line); break;
-      case "Polygon": coordinates = polygon(o.arcs); break;
-      case "MultiPolygon": coordinates = o.arcs.map(polygon); break;
-      default: return null;
-    }
-    return {type: type, coordinates: coordinates};
-  }
-
-  return geometry(o);
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/identity.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/identity.js ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(x) {
-  return x;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/merge.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/merge.js ***!
-  \*************************************************************************/
-/*! exports provided: default, mergeArcs */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mergeArcs", function() { return mergeArcs; });
-/* harmony import */ var _feature__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./feature */ "./node_modules/topojson/node_modules/topojson-client/src/feature.js");
-/* harmony import */ var _stitch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stitch */ "./node_modules/topojson/node_modules/topojson-client/src/stitch.js");
-
-
-
-function planarRingArea(ring) {
-  var i = -1, n = ring.length, a, b = ring[n - 1], area = 0;
-  while (++i < n) a = b, b = ring[i], area += a[0] * b[1] - a[1] * b[0];
-  return Math.abs(area); // Note: doubled area!
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  return Object(_feature__WEBPACK_IMPORTED_MODULE_0__["object"])(topology, mergeArcs.apply(this, arguments));
-});
-
-function mergeArcs(topology, objects) {
-  var polygonsByArc = {},
-      polygons = [],
-      groups = [];
-
-  objects.forEach(geometry);
-
-  function geometry(o) {
-    switch (o.type) {
-      case "GeometryCollection": o.geometries.forEach(geometry); break;
-      case "Polygon": extract(o.arcs); break;
-      case "MultiPolygon": o.arcs.forEach(extract); break;
-    }
-  }
-
-  function extract(polygon) {
-    polygon.forEach(function(ring) {
-      ring.forEach(function(arc) {
-        (polygonsByArc[arc = arc < 0 ? ~arc : arc] || (polygonsByArc[arc] = [])).push(polygon);
-      });
-    });
-    polygons.push(polygon);
-  }
-
-  function area(ring) {
-    return planarRingArea(Object(_feature__WEBPACK_IMPORTED_MODULE_0__["object"])(topology, {type: "Polygon", arcs: [ring]}).coordinates[0]);
-  }
-
-  polygons.forEach(function(polygon) {
-    if (!polygon._) {
-      var group = [],
-          neighbors = [polygon];
-      polygon._ = 1;
-      groups.push(group);
-      while (polygon = neighbors.pop()) {
-        group.push(polygon);
-        polygon.forEach(function(ring) {
-          ring.forEach(function(arc) {
-            polygonsByArc[arc < 0 ? ~arc : arc].forEach(function(polygon) {
-              if (!polygon._) {
-                polygon._ = 1;
-                neighbors.push(polygon);
-              }
-            });
-          });
-        });
-      }
-    }
-  });
-
-  polygons.forEach(function(polygon) {
-    delete polygon._;
-  });
-
-  return {
-    type: "MultiPolygon",
-    arcs: groups.map(function(polygons) {
-      var arcs = [], n;
-
-      // Extract the exterior (unique) arcs.
-      polygons.forEach(function(polygon) {
-        polygon.forEach(function(ring) {
-          ring.forEach(function(arc) {
-            if (polygonsByArc[arc < 0 ? ~arc : arc].length < 2) {
-              arcs.push(arc);
-            }
-          });
-        });
-      });
-
-      // Stitch the arcs into one or more rings.
-      arcs = Object(_stitch__WEBPACK_IMPORTED_MODULE_1__["default"])(topology, arcs);
-
-      // If more than one ring is returned,
-      // at most one of these rings can be the exterior;
-      // choose the one with the greatest absolute area.
-      if ((n = arcs.length) > 1) {
-        for (var i = 1, k = area(arcs[0]), ki, t; i < n; ++i) {
-          if ((ki = area(arcs[i])) > k) {
-            t = arcs[0], arcs[0] = arcs[i], arcs[i] = t, k = ki;
-          }
-        }
-      }
-
-      return arcs;
-    })
-  };
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/mesh.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/mesh.js ***!
-  \************************************************************************/
-/*! exports provided: default, meshArcs */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "meshArcs", function() { return meshArcs; });
-/* harmony import */ var _feature__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./feature */ "./node_modules/topojson/node_modules/topojson-client/src/feature.js");
-/* harmony import */ var _stitch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./stitch */ "./node_modules/topojson/node_modules/topojson-client/src/stitch.js");
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  return Object(_feature__WEBPACK_IMPORTED_MODULE_0__["object"])(topology, meshArcs.apply(this, arguments));
-});
-
-function meshArcs(topology, object, filter) {
-  var arcs, i, n;
-  if (arguments.length > 1) arcs = extractArcs(topology, object, filter);
-  else for (i = 0, arcs = new Array(n = topology.arcs.length); i < n; ++i) arcs[i] = i;
-  return {type: "MultiLineString", arcs: Object(_stitch__WEBPACK_IMPORTED_MODULE_1__["default"])(topology, arcs)};
-}
-
-function extractArcs(topology, object, filter) {
-  var arcs = [],
-      geomsByArc = [],
-      geom;
-
-  function extract0(i) {
-    var j = i < 0 ? ~i : i;
-    (geomsByArc[j] || (geomsByArc[j] = [])).push({i: i, g: geom});
-  }
-
-  function extract1(arcs) {
-    arcs.forEach(extract0);
-  }
-
-  function extract2(arcs) {
-    arcs.forEach(extract1);
-  }
-
-  function extract3(arcs) {
-    arcs.forEach(extract2);
-  }
-
-  function geometry(o) {
-    switch (geom = o, o.type) {
-      case "GeometryCollection": o.geometries.forEach(geometry); break;
-      case "LineString": extract1(o.arcs); break;
-      case "MultiLineString": case "Polygon": extract2(o.arcs); break;
-      case "MultiPolygon": extract3(o.arcs); break;
-    }
-  }
-
-  geometry(object);
-
-  geomsByArc.forEach(filter == null
-      ? function(geoms) { arcs.push(geoms[0].i); }
-      : function(geoms) { if (filter(geoms[0].g, geoms[geoms.length - 1].g)) arcs.push(geoms[0].i); });
-
-  return arcs;
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/neighbors.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/neighbors.js ***!
-  \*****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _bisect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bisect */ "./node_modules/topojson/node_modules/topojson-client/src/bisect.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(objects) {
-  var indexesByArc = {}, // arc index -> array of object indexes
-      neighbors = objects.map(function() { return []; });
-
-  function line(arcs, i) {
-    arcs.forEach(function(a) {
-      if (a < 0) a = ~a;
-      var o = indexesByArc[a];
-      if (o) o.push(i);
-      else indexesByArc[a] = [i];
-    });
-  }
-
-  function polygon(arcs, i) {
-    arcs.forEach(function(arc) { line(arc, i); });
-  }
-
-  function geometry(o, i) {
-    if (o.type === "GeometryCollection") o.geometries.forEach(function(o) { geometry(o, i); });
-    else if (o.type in geometryType) geometryType[o.type](o.arcs, i);
-  }
-
-  var geometryType = {
-    LineString: line,
-    MultiLineString: polygon,
-    Polygon: polygon,
-    MultiPolygon: function(arcs, i) { arcs.forEach(function(arc) { polygon(arc, i); }); }
-  };
-
-  objects.forEach(geometry);
-
-  for (var i in indexesByArc) {
-    for (var indexes = indexesByArc[i], m = indexes.length, j = 0; j < m; ++j) {
-      for (var k = j + 1; k < m; ++k) {
-        var ij = indexes[j], ik = indexes[k], n;
-        if ((n = neighbors[ij])[i = Object(_bisect__WEBPACK_IMPORTED_MODULE_0__["default"])(n, ik)] !== ik) n.splice(i, 0, ik);
-        if ((n = neighbors[ik])[i = Object(_bisect__WEBPACK_IMPORTED_MODULE_0__["default"])(n, ij)] !== ij) n.splice(i, 0, ij);
-      }
-    }
-  }
-
-  return neighbors;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/quantize.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/quantize.js ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _bbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bbox */ "./node_modules/topojson/node_modules/topojson-client/src/bbox.js");
-/* harmony import */ var _untransform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./untransform */ "./node_modules/topojson/node_modules/topojson-client/src/untransform.js");
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, transform) {
-  if (topology.transform) throw new Error("already quantized");
-
-  if (!transform || !transform.scale) {
-    if (!((n = Math.floor(transform)) >= 2)) throw new Error("n must be ≥2");
-    box = topology.bbox || Object(_bbox__WEBPACK_IMPORTED_MODULE_0__["default"])(topology);
-    var x0 = box[0], y0 = box[1], x1 = box[2], y1 = box[3], n;
-    transform = {scale: [x1 - x0 ? (x1 - x0) / (n - 1) : 1, y1 - y0 ? (y1 - y0) / (n - 1) : 1], translate: [x0, y0]};
-  } else {
-    box = topology.bbox;
-  }
-
-  var t = Object(_untransform__WEBPACK_IMPORTED_MODULE_1__["default"])(transform), box, key, inputs = topology.objects, outputs = {};
-
-  function quantizePoint(point) {
-    return t(point);
-  }
-
-  function quantizeGeometry(input) {
-    var output;
-    switch (input.type) {
-      case "GeometryCollection": output = {type: "GeometryCollection", geometries: input.geometries.map(quantizeGeometry)}; break;
-      case "Point": output = {type: "Point", coordinates: quantizePoint(input.coordinates)}; break;
-      case "MultiPoint": output = {type: "MultiPoint", coordinates: input.coordinates.map(quantizePoint)}; break;
-      default: return input;
-    }
-    if (input.id != null) output.id = input.id;
-    if (input.bbox != null) output.bbox = input.bbox;
-    if (input.properties != null) output.properties = input.properties;
-    return output;
-  }
-
-  function quantizeArc(input) {
-    var i = 0, j = 1, n = input.length, p, output = new Array(n); // pessimistic
-    output[0] = t(input[0], 0);
-    while (++i < n) if ((p = t(input[i], i))[0] || p[1]) output[j++] = p; // non-coincident points
-    if (j === 1) output[j++] = [0, 0]; // an arc must have at least two points
-    output.length = j;
-    return output;
-  }
-
-  for (key in inputs) outputs[key] = quantizeGeometry(inputs[key]);
-
-  return {
-    type: "Topology",
-    bbox: box,
-    transform: transform,
-    objects: outputs,
-    arcs: topology.arcs.map(quantizeArc)
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/reverse.js":
-/*!***************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/reverse.js ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(array, n) {
-  var t, j = array.length, i = j - n;
-  while (i < --j) t = array[i], array[i++] = array[j], array[j] = t;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/stitch.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/stitch.js ***!
-  \**************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, arcs) {
-  var stitchedArcs = {},
-      fragmentByStart = {},
-      fragmentByEnd = {},
-      fragments = [],
-      emptyIndex = -1;
-
-  // Stitch empty arcs first, since they may be subsumed by other arcs.
-  arcs.forEach(function(i, j) {
-    var arc = topology.arcs[i < 0 ? ~i : i], t;
-    if (arc.length < 3 && !arc[1][0] && !arc[1][1]) {
-      t = arcs[++emptyIndex], arcs[emptyIndex] = i, arcs[j] = t;
-    }
-  });
-
-  arcs.forEach(function(i) {
-    var e = ends(i),
-        start = e[0],
-        end = e[1],
-        f, g;
-
-    if (f = fragmentByEnd[start]) {
-      delete fragmentByEnd[f.end];
-      f.push(i);
-      f.end = end;
-      if (g = fragmentByStart[end]) {
-        delete fragmentByStart[g.start];
-        var fg = g === f ? f : f.concat(g);
-        fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
-      } else {
-        fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
-      }
-    } else if (f = fragmentByStart[end]) {
-      delete fragmentByStart[f.start];
-      f.unshift(i);
-      f.start = start;
-      if (g = fragmentByEnd[start]) {
-        delete fragmentByEnd[g.end];
-        var gf = g === f ? f : g.concat(f);
-        fragmentByStart[gf.start = g.start] = fragmentByEnd[gf.end = f.end] = gf;
-      } else {
-        fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
-      }
-    } else {
-      f = [i];
-      fragmentByStart[f.start = start] = fragmentByEnd[f.end = end] = f;
-    }
-  });
-
-  function ends(i) {
-    var arc = topology.arcs[i < 0 ? ~i : i], p0 = arc[0], p1;
-    if (topology.transform) p1 = [0, 0], arc.forEach(function(dp) { p1[0] += dp[0], p1[1] += dp[1]; });
-    else p1 = arc[arc.length - 1];
-    return i < 0 ? [p1, p0] : [p0, p1];
-  }
-
-  function flush(fragmentByEnd, fragmentByStart) {
-    for (var k in fragmentByEnd) {
-      var f = fragmentByEnd[k];
-      delete fragmentByStart[f.start];
-      delete f.start;
-      delete f.end;
-      f.forEach(function(i) { stitchedArcs[i < 0 ? ~i : i] = 1; });
-      fragments.push(f);
-    }
-  }
-
-  flush(fragmentByEnd, fragmentByStart);
-  flush(fragmentByStart, fragmentByEnd);
-  arcs.forEach(function(i) { if (!stitchedArcs[i < 0 ? ~i : i]) fragments.push([i]); });
-
-  return fragments;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/transform.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/transform.js ***!
-  \*****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _identity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./identity */ "./node_modules/topojson/node_modules/topojson-client/src/identity.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(transform) {
-  if (transform == null) return _identity__WEBPACK_IMPORTED_MODULE_0__["default"];
-  var x0,
-      y0,
-      kx = transform.scale[0],
-      ky = transform.scale[1],
-      dx = transform.translate[0],
-      dy = transform.translate[1];
-  return function(input, i) {
-    if (!i) x0 = y0 = 0;
-    var j = 2, n = input.length, output = new Array(n);
-    output[0] = (x0 += input[0]) * kx + dx;
-    output[1] = (y0 += input[1]) * ky + dy;
-    while (j < n) output[j] = input[j], ++j;
-    return output;
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-client/src/untransform.js":
-/*!*******************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-client/src/untransform.js ***!
-  \*******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _identity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./identity */ "./node_modules/topojson/node_modules/topojson-client/src/identity.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(transform) {
-  if (transform == null) return _identity__WEBPACK_IMPORTED_MODULE_0__["default"];
-  var x0,
-      y0,
-      kx = transform.scale[0],
-      ky = transform.scale[1],
-      dx = transform.translate[0],
-      dy = transform.translate[1];
-  return function(input, i) {
-    if (!i) x0 = y0 = 0;
-    var j = 2,
-        n = input.length,
-        output = new Array(n),
-        x1 = Math.round((input[0] - dx) / kx),
-        y1 = Math.round((input[1] - dy) / ky);
-    output[0] = x1 - x0, x0 = x1;
-    output[1] = y1 - y0, y0 = y1;
-    while (j < n) output[j] = input[j], ++j;
-    return output;
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/index.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/index.js ***!
-  \*********************************************************************/
-/*! exports provided: topology */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_topology__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/topology */ "./node_modules/topojson/node_modules/topojson-server/src/topology.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "topology", function() { return _src_topology__WEBPACK_IMPORTED_MODULE_0__["default"]; });
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/bounds.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/bounds.js ***!
-  \**************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// Computes the bounding box of the specified hash of GeoJSON objects.
-/* harmony default export */ __webpack_exports__["default"] = (function(objects) {
-  var x0 = Infinity,
-      y0 = Infinity,
-      x1 = -Infinity,
-      y1 = -Infinity;
-
-  function boundGeometry(geometry) {
-    if (geometry != null && boundGeometryType.hasOwnProperty(geometry.type)) boundGeometryType[geometry.type](geometry);
-  }
-
-  var boundGeometryType = {
-    GeometryCollection: function(o) { o.geometries.forEach(boundGeometry); },
-    Point: function(o) { boundPoint(o.coordinates); },
-    MultiPoint: function(o) { o.coordinates.forEach(boundPoint); },
-    LineString: function(o) { boundLine(o.arcs); },
-    MultiLineString: function(o) { o.arcs.forEach(boundLine); },
-    Polygon: function(o) { o.arcs.forEach(boundLine); },
-    MultiPolygon: function(o) { o.arcs.forEach(boundMultiLine); }
-  };
-
-  function boundPoint(coordinates) {
-    var x = coordinates[0],
-        y = coordinates[1];
-    if (x < x0) x0 = x;
-    if (x > x1) x1 = x;
-    if (y < y0) y0 = y;
-    if (y > y1) y1 = y;
-  }
-
-  function boundLine(coordinates) {
-    coordinates.forEach(boundPoint);
-  }
-
-  function boundMultiLine(coordinates) {
-    coordinates.forEach(boundLine);
-  }
-
-  for (var key in objects) {
-    boundGeometry(objects[key]);
-  }
-
-  return x1 >= x0 && y1 >= y0 ? [x0, y0, x1, y1] : undefined;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/cut.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/cut.js ***!
-  \***********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _join__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./join */ "./node_modules/topojson/node_modules/topojson-server/src/join.js");
-
-
-// Given an extracted (pre-)topology, cuts (or rotates) arcs so that all shared
-// point sequences are identified. The topology can then be subsequently deduped
-// to remove exact duplicate arcs.
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  var junctions = Object(_join__WEBPACK_IMPORTED_MODULE_0__["default"])(topology),
-      coordinates = topology.coordinates,
-      lines = topology.lines,
-      rings = topology.rings,
-      next,
-      i, n;
-
-  for (i = 0, n = lines.length; i < n; ++i) {
-    var line = lines[i],
-        lineMid = line[0],
-        lineEnd = line[1];
-    while (++lineMid < lineEnd) {
-      if (junctions.has(coordinates[lineMid])) {
-        next = {0: lineMid, 1: line[1]};
-        line[1] = lineMid;
-        line = line.next = next;
-      }
-    }
-  }
-
-  for (i = 0, n = rings.length; i < n; ++i) {
-    var ring = rings[i],
-        ringStart = ring[0],
-        ringMid = ringStart,
-        ringEnd = ring[1],
-        ringFixed = junctions.has(coordinates[ringStart]);
-    while (++ringMid < ringEnd) {
-      if (junctions.has(coordinates[ringMid])) {
-        if (ringFixed) {
-          next = {0: ringMid, 1: ring[1]};
-          ring[1] = ringMid;
-          ring = ring.next = next;
-        } else { // For the first junction, we can rotate rather than cut.
-          rotateArray(coordinates, ringStart, ringEnd, ringEnd - ringMid);
-          coordinates[ringEnd] = coordinates[ringStart];
-          ringFixed = true;
-          ringMid = ringStart; // restart; we may have skipped junctions
-        }
-      }
-    }
-  }
-
-  return topology;
-});
-
-function rotateArray(array, start, end, offset) {
-  reverse(array, start, end);
-  reverse(array, start, start + offset);
-  reverse(array, start + offset, end);
-}
-
-function reverse(array, start, end) {
-  for (var mid = start + ((end-- - start) >> 1), t; start < mid; ++start, --end) {
-    t = array[start], array[start] = array[end], array[end] = t;
-  }
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/dedup.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/dedup.js ***!
-  \*************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _hash_hashmap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hash/hashmap */ "./node_modules/topojson/node_modules/topojson-server/src/hash/hashmap.js");
-/* harmony import */ var _hash_point_equal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hash/point-equal */ "./node_modules/topojson/node_modules/topojson-server/src/hash/point-equal.js");
-/* harmony import */ var _hash_point_hash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./hash/point-hash */ "./node_modules/topojson/node_modules/topojson-server/src/hash/point-hash.js");
-
-
-
-
-// Given a cut topology, combines duplicate arcs.
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  var coordinates = topology.coordinates,
-      lines = topology.lines, line,
-      rings = topology.rings, ring,
-      arcCount = lines.length + rings.length,
-      i, n;
-
-  delete topology.lines;
-  delete topology.rings;
-
-  // Count the number of (non-unique) arcs to initialize the hashmap safely.
-  for (i = 0, n = lines.length; i < n; ++i) {
-    line = lines[i]; while (line = line.next) ++arcCount;
-  }
-  for (i = 0, n = rings.length; i < n; ++i) {
-    ring = rings[i]; while (ring = ring.next) ++arcCount;
-  }
-
-  var arcsByEnd = Object(_hash_hashmap__WEBPACK_IMPORTED_MODULE_0__["default"])(arcCount * 2 * 1.4, _hash_point_hash__WEBPACK_IMPORTED_MODULE_2__["default"], _hash_point_equal__WEBPACK_IMPORTED_MODULE_1__["default"]),
-      arcs = topology.arcs = [];
-
-  for (i = 0, n = lines.length; i < n; ++i) {
-    line = lines[i];
-    do {
-      dedupLine(line);
-    } while (line = line.next);
-  }
-
-  for (i = 0, n = rings.length; i < n; ++i) {
-    ring = rings[i];
-    if (ring.next) { // arc is no longer closed
-      do {
-        dedupLine(ring);
-      } while (ring = ring.next);
-    } else {
-      dedupRing(ring);
-    }
-  }
-
-  function dedupLine(arc) {
-    var startPoint,
-        endPoint,
-        startArcs, startArc,
-        endArcs, endArc,
-        i, n;
-
-    // Does this arc match an existing arc in order?
-    if (startArcs = arcsByEnd.get(startPoint = coordinates[arc[0]])) {
-      for (i = 0, n = startArcs.length; i < n; ++i) {
-        startArc = startArcs[i];
-        if (equalLine(startArc, arc)) {
-          arc[0] = startArc[0];
-          arc[1] = startArc[1];
-          return;
-        }
-      }
-    }
-
-    // Does this arc match an existing arc in reverse order?
-    if (endArcs = arcsByEnd.get(endPoint = coordinates[arc[1]])) {
-      for (i = 0, n = endArcs.length; i < n; ++i) {
-        endArc = endArcs[i];
-        if (reverseEqualLine(endArc, arc)) {
-          arc[1] = endArc[0];
-          arc[0] = endArc[1];
-          return;
-        }
-      }
-    }
-
-    if (startArcs) startArcs.push(arc); else arcsByEnd.set(startPoint, [arc]);
-    if (endArcs) endArcs.push(arc); else arcsByEnd.set(endPoint, [arc]);
-    arcs.push(arc);
-  }
-
-  function dedupRing(arc) {
-    var endPoint,
-        endArcs,
-        endArc,
-        i, n;
-
-    // Does this arc match an existing line in order, or reverse order?
-    // Rings are closed, so their start point and end point is the same.
-    if (endArcs = arcsByEnd.get(endPoint = coordinates[arc[0]])) {
-      for (i = 0, n = endArcs.length; i < n; ++i) {
-        endArc = endArcs[i];
-        if (equalRing(endArc, arc)) {
-          arc[0] = endArc[0];
-          arc[1] = endArc[1];
-          return;
-        }
-        if (reverseEqualRing(endArc, arc)) {
-          arc[0] = endArc[1];
-          arc[1] = endArc[0];
-          return;
-        }
-      }
-    }
-
-    // Otherwise, does this arc match an existing ring in order, or reverse order?
-    if (endArcs = arcsByEnd.get(endPoint = coordinates[arc[0] + findMinimumOffset(arc)])) {
-      for (i = 0, n = endArcs.length; i < n; ++i) {
-        endArc = endArcs[i];
-        if (equalRing(endArc, arc)) {
-          arc[0] = endArc[0];
-          arc[1] = endArc[1];
-          return;
-        }
-        if (reverseEqualRing(endArc, arc)) {
-          arc[0] = endArc[1];
-          arc[1] = endArc[0];
-          return;
-        }
-      }
-    }
-
-    if (endArcs) endArcs.push(arc); else arcsByEnd.set(endPoint, [arc]);
-    arcs.push(arc);
-  }
-
-  function equalLine(arcA, arcB) {
-    var ia = arcA[0], ib = arcB[0],
-        ja = arcA[1], jb = arcB[1];
-    if (ia - ja !== ib - jb) return false;
-    for (; ia <= ja; ++ia, ++ib) if (!Object(_hash_point_equal__WEBPACK_IMPORTED_MODULE_1__["default"])(coordinates[ia], coordinates[ib])) return false;
-    return true;
-  }
-
-  function reverseEqualLine(arcA, arcB) {
-    var ia = arcA[0], ib = arcB[0],
-        ja = arcA[1], jb = arcB[1];
-    if (ia - ja !== ib - jb) return false;
-    for (; ia <= ja; ++ia, --jb) if (!Object(_hash_point_equal__WEBPACK_IMPORTED_MODULE_1__["default"])(coordinates[ia], coordinates[jb])) return false;
-    return true;
-  }
-
-  function equalRing(arcA, arcB) {
-    var ia = arcA[0], ib = arcB[0],
-        ja = arcA[1], jb = arcB[1],
-        n = ja - ia;
-    if (n !== jb - ib) return false;
-    var ka = findMinimumOffset(arcA),
-        kb = findMinimumOffset(arcB);
-    for (var i = 0; i < n; ++i) {
-      if (!Object(_hash_point_equal__WEBPACK_IMPORTED_MODULE_1__["default"])(coordinates[ia + (i + ka) % n], coordinates[ib + (i + kb) % n])) return false;
-    }
-    return true;
-  }
-
-  function reverseEqualRing(arcA, arcB) {
-    var ia = arcA[0], ib = arcB[0],
-        ja = arcA[1], jb = arcB[1],
-        n = ja - ia;
-    if (n !== jb - ib) return false;
-    var ka = findMinimumOffset(arcA),
-        kb = n - findMinimumOffset(arcB);
-    for (var i = 0; i < n; ++i) {
-      if (!Object(_hash_point_equal__WEBPACK_IMPORTED_MODULE_1__["default"])(coordinates[ia + (i + ka) % n], coordinates[jb - (i + kb) % n])) return false;
-    }
-    return true;
-  }
-
-  // Rings are rotated to a consistent, but arbitrary, start point.
-  // This is necessary to detect when a ring and a rotated copy are dupes.
-  function findMinimumOffset(arc) {
-    var start = arc[0],
-        end = arc[1],
-        mid = start,
-        minimum = mid,
-        minimumPoint = coordinates[mid];
-    while (++mid < end) {
-      var point = coordinates[mid];
-      if (point[0] < minimumPoint[0] || point[0] === minimumPoint[0] && point[1] < minimumPoint[1]) {
-        minimum = mid;
-        minimumPoint = point;
-      }
-    }
-    return minimum - start;
-  }
-
-  return topology;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/delta.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/delta.js ***!
-  \*************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// Given an array of arcs in absolute (but already quantized!) coordinates,
-// converts to fixed-point delta encoding.
-// This is a destructive operation that modifies the given arcs!
-/* harmony default export */ __webpack_exports__["default"] = (function(arcs) {
-  var i = -1,
-      n = arcs.length;
-
-  while (++i < n) {
-    var arc = arcs[i],
-        j = 0,
-        k = 1,
-        m = arc.length,
-        point = arc[0],
-        x0 = point[0],
-        y0 = point[1],
-        x1,
-        y1;
-
-    while (++j < m) {
-      point = arc[j], x1 = point[0], y1 = point[1];
-      if (x1 !== x0 || y1 !== y0) arc[k++] = [x1 - x0, y1 - y0], x0 = x1, y0 = y1;
-    }
-
-    if (k === 1) arc[k++] = [0, 0]; // Each arc must be an array of two or more positions.
-
-    arc.length = k;
-  }
-
-  return arcs;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/extract.js":
-/*!***************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/extract.js ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// Extracts the lines and rings from the specified hash of geometry objects.
-//
-// Returns an object with three properties:
-//
-// * coordinates - shared buffer of [x, y] coordinates
-// * lines - lines extracted from the hash, of the form [start, end]
-// * rings - rings extracted from the hash, of the form [start, end]
-//
-// For each ring or line, start and end represent inclusive indexes into the
-// coordinates buffer. For rings (and closed lines), coordinates[start] equals
-// coordinates[end].
-//
-// For each line or polygon geometry in the input hash, including nested
-// geometries as in geometry collections, the `coordinates` array is replaced
-// with an equivalent `arcs` array that, for each line (for line string
-// geometries) or ring (for polygon geometries), points to one of the above
-// lines or rings.
-/* harmony default export */ __webpack_exports__["default"] = (function(objects) {
-  var index = -1,
-      lines = [],
-      rings = [],
-      coordinates = [];
-
-  function extractGeometry(geometry) {
-    if (geometry && extractGeometryType.hasOwnProperty(geometry.type)) extractGeometryType[geometry.type](geometry);
-  }
-
-  var extractGeometryType = {
-    GeometryCollection: function(o) { o.geometries.forEach(extractGeometry); },
-    LineString: function(o) { o.arcs = extractLine(o.arcs); },
-    MultiLineString: function(o) { o.arcs = o.arcs.map(extractLine); },
-    Polygon: function(o) { o.arcs = o.arcs.map(extractRing); },
-    MultiPolygon: function(o) { o.arcs = o.arcs.map(extractMultiRing); }
-  };
-
-  function extractLine(line) {
-    for (var i = 0, n = line.length; i < n; ++i) coordinates[++index] = line[i];
-    var arc = {0: index - n + 1, 1: index};
-    lines.push(arc);
-    return arc;
-  }
-
-  function extractRing(ring) {
-    for (var i = 0, n = ring.length; i < n; ++i) coordinates[++index] = ring[i];
-    var arc = {0: index - n + 1, 1: index};
-    rings.push(arc);
-    return arc;
-  }
-
-  function extractMultiRing(rings) {
-    return rings.map(extractRing);
-  }
-
-  for (var key in objects) {
-    extractGeometry(objects[key]);
-  }
-
-  return {
-    type: "Topology",
-    coordinates: coordinates,
-    lines: lines,
-    rings: rings,
-    objects: objects
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/geometry.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/geometry.js ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// Given a hash of GeoJSON objects, returns a hash of GeoJSON geometry objects.
-// Any null input geometry objects are represented as {type: null} in the output.
-// Any feature.{id,properties,bbox} are transferred to the output geometry object.
-// Each output geometry object is a shallow copy of the input (e.g., properties, coordinates)!
-/* harmony default export */ __webpack_exports__["default"] = (function(inputs) {
-  var outputs = {}, key;
-  for (key in inputs) outputs[key] = geomifyObject(inputs[key]);
-  return outputs;
-});
-
-function geomifyObject(input) {
-  return input == null ? {type: null}
-      : (input.type === "FeatureCollection" ? geomifyFeatureCollection
-      : input.type === "Feature" ? geomifyFeature
-      : geomifyGeometry)(input);
-}
-
-function geomifyFeatureCollection(input) {
-  var output = {type: "GeometryCollection", geometries: input.features.map(geomifyFeature)};
-  if (input.bbox != null) output.bbox = input.bbox;
-  return output;
-}
-
-function geomifyFeature(input) {
-  var output = geomifyGeometry(input.geometry), key; // eslint-disable-line no-unused-vars
-  if (input.id != null) output.id = input.id;
-  if (input.bbox != null) output.bbox = input.bbox;
-  for (key in input.properties) { output.properties = input.properties; break; }
-  return output;
-}
-
-function geomifyGeometry(input) {
-  if (input == null) return {type: null};
-  var output = input.type === "GeometryCollection" ? {type: "GeometryCollection", geometries: input.geometries.map(geomifyGeometry)}
-      : input.type === "Point" || input.type === "MultiPoint" ? {type: input.type, coordinates: input.coordinates}
-      : {type: input.type, arcs: input.coordinates}; // TODO Check for unknown types?
-  if (input.bbox != null) output.bbox = input.bbox;
-  return output;
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/hash/hashmap.js":
-/*!********************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/hash/hashmap.js ***!
-  \********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(size, hash, equal, keyType, keyEmpty, valueType) {
-  if (arguments.length === 3) {
-    keyType = valueType = Array;
-    keyEmpty = null;
-  }
-
-  var keystore = new keyType(size = 1 << Math.max(4, Math.ceil(Math.log(size) / Math.LN2))),
-      valstore = new valueType(size),
-      mask = size - 1;
-
-  for (var i = 0; i < size; ++i) {
-    keystore[i] = keyEmpty;
-  }
-
-  function set(key, value) {
-    var index = hash(key) & mask,
-        matchKey = keystore[index],
-        collisions = 0;
-    while (matchKey != keyEmpty) {
-      if (equal(matchKey, key)) return valstore[index] = value;
-      if (++collisions >= size) throw new Error("full hashmap");
-      matchKey = keystore[index = (index + 1) & mask];
-    }
-    keystore[index] = key;
-    valstore[index] = value;
-    return value;
-  }
-
-  function maybeSet(key, value) {
-    var index = hash(key) & mask,
-        matchKey = keystore[index],
-        collisions = 0;
-    while (matchKey != keyEmpty) {
-      if (equal(matchKey, key)) return valstore[index];
-      if (++collisions >= size) throw new Error("full hashmap");
-      matchKey = keystore[index = (index + 1) & mask];
-    }
-    keystore[index] = key;
-    valstore[index] = value;
-    return value;
-  }
-
-  function get(key, missingValue) {
-    var index = hash(key) & mask,
-        matchKey = keystore[index],
-        collisions = 0;
-    while (matchKey != keyEmpty) {
-      if (equal(matchKey, key)) return valstore[index];
-      if (++collisions >= size) break;
-      matchKey = keystore[index = (index + 1) & mask];
-    }
-    return missingValue;
-  }
-
-  function keys() {
-    var keys = [];
-    for (var i = 0, n = keystore.length; i < n; ++i) {
-      var matchKey = keystore[i];
-      if (matchKey != keyEmpty) keys.push(matchKey);
-    }
-    return keys;
-  }
-
-  return {
-    set: set,
-    maybeSet: maybeSet, // set if unset
-    get: get,
-    keys: keys
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/hash/hashset.js":
-/*!********************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/hash/hashset.js ***!
-  \********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(size, hash, equal, type, empty) {
-  if (arguments.length === 3) {
-    type = Array;
-    empty = null;
-  }
-
-  var store = new type(size = 1 << Math.max(4, Math.ceil(Math.log(size) / Math.LN2))),
-      mask = size - 1;
-
-  for (var i = 0; i < size; ++i) {
-    store[i] = empty;
-  }
-
-  function add(value) {
-    var index = hash(value) & mask,
-        match = store[index],
-        collisions = 0;
-    while (match != empty) {
-      if (equal(match, value)) return true;
-      if (++collisions >= size) throw new Error("full hashset");
-      match = store[index = (index + 1) & mask];
-    }
-    store[index] = value;
-    return true;
-  }
-
-  function has(value) {
-    var index = hash(value) & mask,
-        match = store[index],
-        collisions = 0;
-    while (match != empty) {
-      if (equal(match, value)) return true;
-      if (++collisions >= size) break;
-      match = store[index = (index + 1) & mask];
-    }
-    return false;
-  }
-
-  function values() {
-    var values = [];
-    for (var i = 0, n = store.length; i < n; ++i) {
-      var match = store[i];
-      if (match != empty) values.push(match);
-    }
-    return values;
-  }
-
-  return {
-    add: add,
-    has: has,
-    values: values
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/hash/point-equal.js":
-/*!************************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/hash/point-equal.js ***!
-  \************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(pointA, pointB) {
-  return pointA[0] === pointB[0] && pointA[1] === pointB[1];
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/hash/point-hash.js":
-/*!***********************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/hash/point-hash.js ***!
-  \***********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// TODO if quantized, use simpler Int32 hashing?
-
-var buffer = new ArrayBuffer(16),
-    floats = new Float64Array(buffer),
-    uints = new Uint32Array(buffer);
-
-/* harmony default export */ __webpack_exports__["default"] = (function(point) {
-  floats[0] = point[0];
-  floats[1] = point[1];
-  var hash = uints[0] ^ uints[1];
-  hash = hash << 5 ^ hash >> 7 ^ uints[2] ^ uints[3];
-  return hash & 0x7fffffff;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/join.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/join.js ***!
-  \************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _hash_hashset__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./hash/hashset */ "./node_modules/topojson/node_modules/topojson-server/src/hash/hashset.js");
-/* harmony import */ var _hash_hashmap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hash/hashmap */ "./node_modules/topojson/node_modules/topojson-server/src/hash/hashmap.js");
-/* harmony import */ var _hash_point_equal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./hash/point-equal */ "./node_modules/topojson/node_modules/topojson-server/src/hash/point-equal.js");
-/* harmony import */ var _hash_point_hash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hash/point-hash */ "./node_modules/topojson/node_modules/topojson-server/src/hash/point-hash.js");
-
-
-
-
-
-// Given an extracted (pre-)topology, identifies all of the junctions. These are
-// the points at which arcs (lines or rings) will need to be cut so that each
-// arc is represented uniquely.
-//
-// A junction is a point where at least one arc deviates from another arc going
-// through the same point. For example, consider the point B. If there is a arc
-// through ABC and another arc through CBA, then B is not a junction because in
-// both cases the adjacent point pairs are {A,C}. However, if there is an
-// additional arc ABD, then {A,D} != {A,C}, and thus B becomes a junction.
-//
-// For a closed ring ABCA, the first point A’s adjacent points are the second
-// and last point {B,C}. For a line, the first and last point are always
-// considered junctions, even if the line is closed; this ensures that a closed
-// line is never rotated.
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  var coordinates = topology.coordinates,
-      lines = topology.lines,
-      rings = topology.rings,
-      indexes = index(),
-      visitedByIndex = new Int32Array(coordinates.length),
-      leftByIndex = new Int32Array(coordinates.length),
-      rightByIndex = new Int32Array(coordinates.length),
-      junctionByIndex = new Int8Array(coordinates.length),
-      junctionCount = 0, // upper bound on number of junctions
-      i, n,
-      previousIndex,
-      currentIndex,
-      nextIndex;
-
-  for (i = 0, n = coordinates.length; i < n; ++i) {
-    visitedByIndex[i] = leftByIndex[i] = rightByIndex[i] = -1;
-  }
-
-  for (i = 0, n = lines.length; i < n; ++i) {
-    var line = lines[i],
-        lineStart = line[0],
-        lineEnd = line[1];
-    currentIndex = indexes[lineStart];
-    nextIndex = indexes[++lineStart];
-    ++junctionCount, junctionByIndex[currentIndex] = 1; // start
-    while (++lineStart <= lineEnd) {
-      sequence(i, previousIndex = currentIndex, currentIndex = nextIndex, nextIndex = indexes[lineStart]);
-    }
-    ++junctionCount, junctionByIndex[nextIndex] = 1; // end
-  }
-
-  for (i = 0, n = coordinates.length; i < n; ++i) {
-    visitedByIndex[i] = -1;
-  }
-
-  for (i = 0, n = rings.length; i < n; ++i) {
-    var ring = rings[i],
-        ringStart = ring[0] + 1,
-        ringEnd = ring[1];
-    previousIndex = indexes[ringEnd - 1];
-    currentIndex = indexes[ringStart - 1];
-    nextIndex = indexes[ringStart];
-    sequence(i, previousIndex, currentIndex, nextIndex);
-    while (++ringStart <= ringEnd) {
-      sequence(i, previousIndex = currentIndex, currentIndex = nextIndex, nextIndex = indexes[ringStart]);
-    }
-  }
-
-  function sequence(i, previousIndex, currentIndex, nextIndex) {
-    if (visitedByIndex[currentIndex] === i) return; // ignore self-intersection
-    visitedByIndex[currentIndex] = i;
-    var leftIndex = leftByIndex[currentIndex];
-    if (leftIndex >= 0) {
-      var rightIndex = rightByIndex[currentIndex];
-      if ((leftIndex !== previousIndex || rightIndex !== nextIndex)
-        && (leftIndex !== nextIndex || rightIndex !== previousIndex)) {
-        ++junctionCount, junctionByIndex[currentIndex] = 1;
-      }
-    } else {
-      leftByIndex[currentIndex] = previousIndex;
-      rightByIndex[currentIndex] = nextIndex;
-    }
-  }
-
-  function index() {
-    var indexByPoint = Object(_hash_hashmap__WEBPACK_IMPORTED_MODULE_1__["default"])(coordinates.length * 1.4, hashIndex, equalIndex, Int32Array, -1, Int32Array),
-        indexes = new Int32Array(coordinates.length);
-
-    for (var i = 0, n = coordinates.length; i < n; ++i) {
-      indexes[i] = indexByPoint.maybeSet(i, i);
-    }
-
-    return indexes;
-  }
-
-  function hashIndex(i) {
-    return Object(_hash_point_hash__WEBPACK_IMPORTED_MODULE_3__["default"])(coordinates[i]);
-  }
-
-  function equalIndex(i, j) {
-    return Object(_hash_point_equal__WEBPACK_IMPORTED_MODULE_2__["default"])(coordinates[i], coordinates[j]);
-  }
-
-  visitedByIndex = leftByIndex = rightByIndex = null;
-
-  var junctionByPoint = Object(_hash_hashset__WEBPACK_IMPORTED_MODULE_0__["default"])(junctionCount * 1.4, _hash_point_hash__WEBPACK_IMPORTED_MODULE_3__["default"], _hash_point_equal__WEBPACK_IMPORTED_MODULE_2__["default"]), j;
-
-  // Convert back to a standard hashset by point for caller convenience.
-  for (i = 0, n = coordinates.length; i < n; ++i) {
-    if (junctionByIndex[j = indexes[i]]) {
-      junctionByPoint.add(coordinates[j]);
-    }
-  }
-
-  return junctionByPoint;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/prequantize.js":
-/*!*******************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/prequantize.js ***!
-  \*******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(objects, bbox, n) {
-  var x0 = bbox[0],
-      y0 = bbox[1],
-      x1 = bbox[2],
-      y1 = bbox[3],
-      kx = x1 - x0 ? (n - 1) / (x1 - x0) : 1,
-      ky = y1 - y0 ? (n - 1) / (y1 - y0) : 1;
-
-  function quantizePoint(input) {
-    return [Math.round((input[0] - x0) * kx), Math.round((input[1] - y0) * ky)];
-  }
-
-  function quantizePoints(input, m) {
-    var i = -1,
-        j = 0,
-        n = input.length,
-        output = new Array(n), // pessimistic
-        pi,
-        px,
-        py,
-        x,
-        y;
-
-    while (++i < n) {
-      pi = input[i];
-      x = Math.round((pi[0] - x0) * kx);
-      y = Math.round((pi[1] - y0) * ky);
-      if (x !== px || y !== py) output[j++] = [px = x, py = y]; // non-coincident points
-    }
-
-    output.length = j;
-    while (j < m) j = output.push([output[0][0], output[0][1]]);
-    return output;
-  }
-
-  function quantizeLine(input) {
-    return quantizePoints(input, 2);
-  }
-
-  function quantizeRing(input) {
-    return quantizePoints(input, 4);
-  }
-
-  function quantizePolygon(input) {
-    return input.map(quantizeRing);
-  }
-
-  function quantizeGeometry(o) {
-    if (o != null && quantizeGeometryType.hasOwnProperty(o.type)) quantizeGeometryType[o.type](o);
-  }
-
-  var quantizeGeometryType = {
-    GeometryCollection: function(o) { o.geometries.forEach(quantizeGeometry); },
-    Point: function(o) { o.coordinates = quantizePoint(o.coordinates); },
-    MultiPoint: function(o) { o.coordinates = o.coordinates.map(quantizePoint); },
-    LineString: function(o) { o.arcs = quantizeLine(o.arcs); },
-    MultiLineString: function(o) { o.arcs = o.arcs.map(quantizeLine); },
-    Polygon: function(o) { o.arcs = quantizePolygon(o.arcs); },
-    MultiPolygon: function(o) { o.arcs = o.arcs.map(quantizePolygon); }
-  };
-
-  for (var key in objects) {
-    quantizeGeometry(objects[key]);
-  }
-
-  return {
-    scale: [1 / kx, 1 / ky],
-    translate: [x0, y0]
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-server/src/topology.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-server/src/topology.js ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _bounds__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bounds */ "./node_modules/topojson/node_modules/topojson-server/src/bounds.js");
-/* harmony import */ var _cut__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./cut */ "./node_modules/topojson/node_modules/topojson-server/src/cut.js");
-/* harmony import */ var _dedup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dedup */ "./node_modules/topojson/node_modules/topojson-server/src/dedup.js");
-/* harmony import */ var _delta__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./delta */ "./node_modules/topojson/node_modules/topojson-server/src/delta.js");
-/* harmony import */ var _extract__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./extract */ "./node_modules/topojson/node_modules/topojson-server/src/extract.js");
-/* harmony import */ var _geometry__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./geometry */ "./node_modules/topojson/node_modules/topojson-server/src/geometry.js");
-/* harmony import */ var _hash_hashmap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./hash/hashmap */ "./node_modules/topojson/node_modules/topojson-server/src/hash/hashmap.js");
-/* harmony import */ var _prequantize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./prequantize */ "./node_modules/topojson/node_modules/topojson-server/src/prequantize.js");
-
-
-
-
-
-
-
-
-
-// Constructs the TopoJSON Topology for the specified hash of features.
-// Each object in the specified hash must be a GeoJSON object,
-// meaning FeatureCollection, a Feature or a geometry object.
-/* harmony default export */ __webpack_exports__["default"] = (function(objects, quantization) {
-  var bbox = Object(_bounds__WEBPACK_IMPORTED_MODULE_0__["default"])(objects = Object(_geometry__WEBPACK_IMPORTED_MODULE_5__["default"])(objects)),
-      transform = quantization > 0 && bbox && Object(_prequantize__WEBPACK_IMPORTED_MODULE_7__["default"])(objects, bbox, quantization),
-      topology = Object(_dedup__WEBPACK_IMPORTED_MODULE_2__["default"])(Object(_cut__WEBPACK_IMPORTED_MODULE_1__["default"])(Object(_extract__WEBPACK_IMPORTED_MODULE_4__["default"])(objects))),
-      coordinates = topology.coordinates,
-      indexByArc = Object(_hash_hashmap__WEBPACK_IMPORTED_MODULE_6__["default"])(topology.arcs.length * 1.4, hashArc, equalArc);
-
-  objects = topology.objects; // for garbage collection
-  topology.bbox = bbox;
-  topology.arcs = topology.arcs.map(function(arc, i) {
-    indexByArc.set(arc, i);
-    return coordinates.slice(arc[0], arc[1] + 1);
-  });
-
-  delete topology.coordinates;
-  coordinates = null;
-
-  function indexGeometry(geometry) {
-    if (geometry && indexGeometryType.hasOwnProperty(geometry.type)) indexGeometryType[geometry.type](geometry);
-  }
-
-  var indexGeometryType = {
-    GeometryCollection: function(o) { o.geometries.forEach(indexGeometry); },
-    LineString: function(o) { o.arcs = indexArcs(o.arcs); },
-    MultiLineString: function(o) { o.arcs = o.arcs.map(indexArcs); },
-    Polygon: function(o) { o.arcs = o.arcs.map(indexArcs); },
-    MultiPolygon: function(o) { o.arcs = o.arcs.map(indexMultiArcs); }
-  };
-
-  function indexArcs(arc) {
-    var indexes = [];
-    do {
-      var index = indexByArc.get(arc);
-      indexes.push(arc[0] < arc[1] ? index : ~index);
-    } while (arc = arc.next);
-    return indexes;
-  }
-
-  function indexMultiArcs(arcs) {
-    return arcs.map(indexArcs);
-  }
-
-  for (var key in objects) {
-    indexGeometry(objects[key]);
-  }
-
-  if (transform) {
-    topology.transform = transform;
-    topology.arcs = Object(_delta__WEBPACK_IMPORTED_MODULE_3__["default"])(topology.arcs);
-  }
-
-  return topology;
-});
-
-function hashArc(arc) {
-  var i = arc[0], j = arc[1], t;
-  if (j < i) t = i, i = j, j = t;
-  return i + 31 * j;
-}
-
-function equalArc(arcA, arcB) {
-  var ia = arcA[0], ja = arcA[1],
-      ib = arcB[0], jb = arcB[1], t;
-  if (ja < ia) t = ia, ia = ja, ja = t;
-  if (jb < ib) t = ib, ib = jb, jb = t;
-  return ia === ib && ja === jb;
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/index.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/index.js ***!
-  \***********************************************************************/
-/*! exports provided: filter, filterAttached, filterAttachedWeight, filterWeight, planarRingArea, planarTriangleArea, presimplify, quantile, simplify, sphericalRingArea, sphericalTriangleArea */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _src_filter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/filter */ "./node_modules/topojson/node_modules/topojson-simplify/src/filter.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filter", function() { return _src_filter__WEBPACK_IMPORTED_MODULE_0__["default"]; });
-
-/* harmony import */ var _src_filterAttached__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/filterAttached */ "./node_modules/topojson/node_modules/topojson-simplify/src/filterAttached.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filterAttached", function() { return _src_filterAttached__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony import */ var _src_filterAttachedWeight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/filterAttachedWeight */ "./node_modules/topojson/node_modules/topojson-simplify/src/filterAttachedWeight.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filterAttachedWeight", function() { return _src_filterAttachedWeight__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony import */ var _src_filterWeight__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./src/filterWeight */ "./node_modules/topojson/node_modules/topojson-simplify/src/filterWeight.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "filterWeight", function() { return _src_filterWeight__WEBPACK_IMPORTED_MODULE_3__["default"]; });
-
-/* harmony import */ var _src_planar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./src/planar */ "./node_modules/topojson/node_modules/topojson-simplify/src/planar.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "planarRingArea", function() { return _src_planar__WEBPACK_IMPORTED_MODULE_4__["planarRingArea"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "planarTriangleArea", function() { return _src_planar__WEBPACK_IMPORTED_MODULE_4__["planarTriangleArea"]; });
-
-/* harmony import */ var _src_presimplify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./src/presimplify */ "./node_modules/topojson/node_modules/topojson-simplify/src/presimplify.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "presimplify", function() { return _src_presimplify__WEBPACK_IMPORTED_MODULE_5__["default"]; });
-
-/* harmony import */ var _src_quantile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./src/quantile */ "./node_modules/topojson/node_modules/topojson-simplify/src/quantile.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "quantile", function() { return _src_quantile__WEBPACK_IMPORTED_MODULE_6__["default"]; });
-
-/* harmony import */ var _src_simplify__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./src/simplify */ "./node_modules/topojson/node_modules/topojson-simplify/src/simplify.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "simplify", function() { return _src_simplify__WEBPACK_IMPORTED_MODULE_7__["default"]; });
-
-/* harmony import */ var _src_spherical__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./src/spherical */ "./node_modules/topojson/node_modules/topojson-simplify/src/spherical.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "sphericalRingArea", function() { return _src_spherical__WEBPACK_IMPORTED_MODULE_8__["sphericalRingArea"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "sphericalTriangleArea", function() { return _src_spherical__WEBPACK_IMPORTED_MODULE_8__["sphericalTriangleArea"]; });
-
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/filter.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/filter.js ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _prune__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./prune */ "./node_modules/topojson/node_modules/topojson-simplify/src/prune.js");
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, filter) {
-  var oldObjects = topology.objects,
-      newObjects = {},
-      key;
-
-  if (filter == null) filter = filterTrue;
-
-  function filterGeometry(input) {
-    var output, arcs;
-    switch (input.type) {
-      case "Polygon": {
-        arcs = filterRings(input.arcs);
-        output = arcs ? {type: "Polygon", arcs: arcs} : {type: null};
-        break;
-      }
-      case "MultiPolygon": {
-        arcs = input.arcs.map(filterRings).filter(filterIdentity);
-        output = arcs.length ? {type: "MultiPolygon", arcs: arcs} : {type: null};
-        break;
-      }
-      case "GeometryCollection": {
-        arcs = input.geometries.map(filterGeometry).filter(filterNotNull);
-        output = arcs.length ? {type: "GeometryCollection", geometries: arcs} : {type: null};
-        break;
-      }
-      default: return input;
-    }
-    if (input.id != null) output.id = input.id;
-    if (input.bbox != null) output.bbox = input.bbox;
-    if (input.properties != null) output.properties = input.properties;
-    return output;
-  }
-
-  function filterRings(arcs) {
-    return arcs.length && filterExteriorRing(arcs[0]) // if the exterior is small, ignore any holes
-        ? [arcs[0]].concat(arcs.slice(1).filter(filterInteriorRing))
-        : null;
-  }
-
-  function filterExteriorRing(ring) {
-    return filter(ring, false);
-  }
-
-  function filterInteriorRing(ring) {
-    return filter(ring, true);
-  }
-
-  for (key in oldObjects) {
-    newObjects[key] = filterGeometry(oldObjects[key]);
-  }
-
-  return Object(_prune__WEBPACK_IMPORTED_MODULE_0__["default"])({
-    type: "Topology",
-    bbox: topology.bbox,
-    transform: topology.transform,
-    objects: newObjects,
-    arcs: topology.arcs
-  });
-});
-
-function filterTrue() {
-  return true;
-}
-
-function filterIdentity(x) {
-  return x;
-}
-
-function filterNotNull(geometry) {
-  return geometry.type != null;
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/filterAttached.js":
-/*!************************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/filterAttached.js ***!
-  \************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  var ownerByArc = new Array(topology.arcs.length), // arc index -> index of unique associated ring, or -1 if used by multiple rings
-      ownerIndex = 0,
-      key;
-
-  function testGeometry(o) {
-    switch (o.type) {
-      case "GeometryCollection": o.geometries.forEach(testGeometry); break;
-      case "Polygon": testArcs(o.arcs); break;
-      case "MultiPolygon": o.arcs.forEach(testArcs); break;
-    }
-  }
-
-  function testArcs(arcs) {
-    for (var i = 0, n = arcs.length; i < n; ++i, ++ownerIndex) {
-      for (var ring = arcs[i], j = 0, m = ring.length; j < m; ++j) {
-        var arc = ring[j];
-        if (arc < 0) arc = ~arc;
-        var owner = ownerByArc[arc];
-        if (owner == null) ownerByArc[arc] = ownerIndex;
-        else if (owner !== ownerIndex) ownerByArc[arc] = -1;
-      }
-    }
-  }
-
-  for (key in topology.objects) {
-    testGeometry(topology.objects[key]);
-  }
-
-  return function(ring) {
-    for (var j = 0, m = ring.length, arc; j < m; ++j) {
-      if (ownerByArc[(arc = ring[j]) < 0 ? ~arc : arc] === -1) {
-        return true;
-      }
-    }
-    return false;
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/filterAttachedWeight.js":
-/*!******************************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/filterAttachedWeight.js ***!
-  \******************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _filterAttached__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./filterAttached */ "./node_modules/topojson/node_modules/topojson-simplify/src/filterAttached.js");
-/* harmony import */ var _filterWeight__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./filterWeight */ "./node_modules/topojson/node_modules/topojson-simplify/src/filterWeight.js");
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, minWeight, weight) {
-  var a = Object(_filterAttached__WEBPACK_IMPORTED_MODULE_0__["default"])(topology),
-      w = Object(_filterWeight__WEBPACK_IMPORTED_MODULE_1__["default"])(topology, minWeight, weight);
-  return function(ring, interior) {
-    return a(ring, interior) || w(ring, interior);
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/filterWeight.js":
-/*!**********************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/filterWeight.js ***!
-  \**********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var topojson_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! topojson-client */ "./node_modules/topojson/node_modules/topojson-client/index.js");
-/* harmony import */ var _planar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./planar */ "./node_modules/topojson/node_modules/topojson-simplify/src/planar.js");
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, minWeight, weight) {
-  minWeight = minWeight == null ? Number.MIN_VALUE : +minWeight;
-
-  if (weight == null) weight = _planar__WEBPACK_IMPORTED_MODULE_1__["planarRingArea"];
-
-  return function(ring, interior) {
-    return weight(Object(topojson_client__WEBPACK_IMPORTED_MODULE_0__["feature"])(topology, {type: "Polygon", arcs: [ring]}).geometry.coordinates[0], interior) >= minWeight;
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/heap.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/heap.js ***!
-  \**************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-function compare(a, b) {
-  return a[1][2] - b[1][2];
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (function() {
-  var heap = {},
-      array = [],
-      size = 0;
-
-  heap.push = function(object) {
-    up(array[object._ = size] = object, size++);
-    return size;
-  };
-
-  heap.pop = function() {
-    if (size <= 0) return;
-    var removed = array[0], object;
-    if (--size > 0) object = array[size], down(array[object._ = 0] = object, 0);
-    return removed;
-  };
-
-  heap.remove = function(removed) {
-    var i = removed._, object;
-    if (array[i] !== removed) return; // invalid request
-    if (i !== --size) object = array[size], (compare(object, removed) < 0 ? up : down)(array[object._ = i] = object, i);
-    return i;
-  };
-
-  function up(object, i) {
-    while (i > 0) {
-      var j = ((i + 1) >> 1) - 1,
-          parent = array[j];
-      if (compare(object, parent) >= 0) break;
-      array[parent._ = i] = parent;
-      array[object._ = i = j] = object;
-    }
-  }
-
-  function down(object, i) {
-    while (true) {
-      var r = (i + 1) << 1,
-          l = r - 1,
-          j = i,
-          child = array[j];
-      if (l < size && compare(array[l], child) < 0) child = array[j = l];
-      if (r < size && compare(array[r], child) < 0) child = array[j = r];
-      if (j === i) break;
-      array[child._ = i] = child;
-      array[object._ = i = j] = object;
-    }
-  }
-
-  return heap;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/planar.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/planar.js ***!
-  \****************************************************************************/
-/*! exports provided: planarTriangleArea, planarRingArea */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "planarTriangleArea", function() { return planarTriangleArea; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "planarRingArea", function() { return planarRingArea; });
-function planarTriangleArea(triangle) {
-  var a = triangle[0], b = triangle[1], c = triangle[2];
-  return Math.abs((a[0] - c[0]) * (b[1] - a[1]) - (a[0] - b[0]) * (c[1] - a[1])) / 2;
-}
-
-function planarRingArea(ring) {
-  var i = -1, n = ring.length, a, b = ring[n - 1], area = 0;
-  while (++i < n) a = b, b = ring[i], area += a[0] * b[1] - a[1] * b[0];
-  return Math.abs(area) / 2;
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/presimplify.js":
-/*!*********************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/presimplify.js ***!
-  \*********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var topojson_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! topojson-client */ "./node_modules/topojson/node_modules/topojson-client/index.js");
-/* harmony import */ var _heap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./heap */ "./node_modules/topojson/node_modules/topojson-simplify/src/heap.js");
-/* harmony import */ var _planar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./planar */ "./node_modules/topojson/node_modules/topojson-simplify/src/planar.js");
-
-
-
-
-function copy(point) {
-  return [point[0], point[1], 0];
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, weight) {
-  var point = topology.transform ? Object(topojson_client__WEBPACK_IMPORTED_MODULE_0__["transform"])(topology.transform) : copy,
-      heap = Object(_heap__WEBPACK_IMPORTED_MODULE_1__["default"])();
-
-  if (weight == null) weight = _planar__WEBPACK_IMPORTED_MODULE_2__["planarTriangleArea"];
-
-  var arcs = topology.arcs.map(function(arc) {
-    var triangles = [],
-        maxWeight = 0,
-        triangle,
-        i,
-        n;
-
-    arc = arc.map(point);
-
-    for (i = 1, n = arc.length - 1; i < n; ++i) {
-      triangle = [arc[i - 1], arc[i], arc[i + 1]];
-      triangle[1][2] = weight(triangle);
-      triangles.push(triangle);
-      heap.push(triangle);
-    }
-
-    // Always keep the arc endpoints!
-    arc[0][2] = arc[n][2] = Infinity;
-
-    for (i = 0, n = triangles.length; i < n; ++i) {
-      triangle = triangles[i];
-      triangle.previous = triangles[i - 1];
-      triangle.next = triangles[i + 1];
-    }
-
-    while (triangle = heap.pop()) {
-      var previous = triangle.previous,
-          next = triangle.next;
-
-      // If the weight of the current point is less than that of the previous
-      // point to be eliminated, use the latter’s weight instead. This ensures
-      // that the current point cannot be eliminated without eliminating
-      // previously- eliminated points.
-      if (triangle[1][2] < maxWeight) triangle[1][2] = maxWeight;
-      else maxWeight = triangle[1][2];
-
-      if (previous) {
-        previous.next = next;
-        previous[2] = triangle[2];
-        update(previous);
-      }
-
-      if (next) {
-        next.previous = previous;
-        next[0] = triangle[0];
-        update(next);
-      }
-    }
-
-    return arc;
-  });
-
-  function update(triangle) {
-    heap.remove(triangle);
-    triangle[1][2] = weight(triangle);
-    heap.push(triangle);
-  }
-
-  return {
-    type: "Topology",
-    bbox: topology.bbox,
-    objects: topology.objects,
-    arcs: arcs
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/prune.js":
-/*!***************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/prune.js ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(topology) {
-  var oldObjects = topology.objects,
-      newObjects = {},
-      oldArcs = topology.arcs,
-      oldArcsLength = oldArcs.length,
-      oldIndex = -1,
-      newIndexByOldIndex = new Array(oldArcsLength),
-      newArcsLength = 0,
-      newArcs,
-      newIndex = -1,
-      key;
-
-  function scanGeometry(input) {
-    switch (input.type) {
-      case "GeometryCollection": input.geometries.forEach(scanGeometry); break;
-      case "LineString": scanArcs(input.arcs); break;
-      case "MultiLineString": input.arcs.forEach(scanArcs); break;
-      case "Polygon": input.arcs.forEach(scanArcs); break;
-      case "MultiPolygon": input.arcs.forEach(scanMultiArcs); break;
-    }
-  }
-
-  function scanArc(index) {
-    if (index < 0) index = ~index;
-    if (!newIndexByOldIndex[index]) newIndexByOldIndex[index] = 1, ++newArcsLength;
-  }
-
-  function scanArcs(arcs) {
-    arcs.forEach(scanArc);
-  }
-
-  function scanMultiArcs(arcs) {
-    arcs.forEach(scanArcs);
-  }
-
-  function reindexGeometry(input) {
-    var output;
-    switch (input.type) {
-      case "GeometryCollection": output = {type: "GeometryCollection", geometries: input.geometries.map(reindexGeometry)}; break;
-      case "LineString": output = {type: "LineString", arcs: reindexArcs(input.arcs)}; break;
-      case "MultiLineString": output = {type: "MultiLineString", arcs: input.arcs.map(reindexArcs)}; break;
-      case "Polygon": output = {type: "Polygon", arcs: input.arcs.map(reindexArcs)}; break;
-      case "MultiPolygon": output = {type: "MultiPolygon", arcs: input.arcs.map(reindexMultiArcs)}; break;
-      default: return input;
-    }
-    if (input.id != null) output.id = input.id;
-    if (input.bbox != null) output.bbox = input.bbox;
-    if (input.properties != null) output.properties = input.properties;
-    return output;
-  }
-
-  function reindexArc(oldIndex) {
-    return oldIndex < 0 ? ~newIndexByOldIndex[~oldIndex] : newIndexByOldIndex[oldIndex];
-  }
-
-  function reindexArcs(arcs) {
-    return arcs.map(reindexArc);
-  }
-
-  function reindexMultiArcs(arcs) {
-    return arcs.map(reindexArcs);
-  }
-
-  for (key in oldObjects) {
-    scanGeometry(oldObjects[key]);
-  }
-
-  newArcs = new Array(newArcsLength);
-
-  while (++oldIndex < oldArcsLength) {
-    if (newIndexByOldIndex[oldIndex]) {
-      newIndexByOldIndex[oldIndex] = ++newIndex;
-      newArcs[newIndex] = oldArcs[oldIndex];
-    }
-  }
-
-  for (key in oldObjects) {
-    newObjects[key] = reindexGeometry(oldObjects[key]);
-  }
-
-  return {
-    type: "Topology",
-    bbox: topology.bbox,
-    transform: topology.transform,
-    objects: newObjects,
-    arcs: newArcs
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/quantile.js":
-/*!******************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/quantile.js ***!
-  \******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, p) {
-  var array = [];
-
-  topology.arcs.forEach(function(arc) {
-    arc.forEach(function(point) {
-      if (isFinite(point[2])) { // Ignore endpoints, whose weight is Infinity.
-        array.push(point[2]);
-      }
-    });
-  });
-
-  return array.length && quantile(array.sort(descending), p);
-});
-
-function quantile(array, p) {
-  if (!(n = array.length)) return;
-  if ((p = +p) <= 0 || n < 2) return array[0];
-  if (p >= 1) return array[n - 1];
-  var n,
-      h = (n - 1) * p,
-      i = Math.floor(h),
-      a = array[i],
-      b = array[i + 1];
-  return a + (b - a) * (h - i);
-}
-
-function descending(a, b) {
-  return b - a;
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/simplify.js":
-/*!******************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/simplify.js ***!
-  \******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function(topology, minWeight) {
-  minWeight = minWeight == null ? Number.MIN_VALUE : +minWeight;
-
-  // Remove points whose weight is less than the minimum weight.
-  var arcs = topology.arcs.map(function(input) {
-    var i = -1,
-        j = 0,
-        n = input.length,
-        output = new Array(n), // pessimistic
-        point;
-
-    while (++i < n) {
-      if ((point = input[i])[2] >= minWeight) {
-        output[j++] = [point[0], point[1]];
-      }
-    }
-
-    output.length = j;
-    return output;
-  });
-
-  return {
-    type: "Topology",
-    transform: topology.transform,
-    bbox: topology.bbox,
-    objects: topology.objects,
-    arcs: arcs
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/topojson/node_modules/topojson-simplify/src/spherical.js":
-/*!*******************************************************************************!*\
-  !*** ./node_modules/topojson/node_modules/topojson-simplify/src/spherical.js ***!
-  \*******************************************************************************/
-/*! exports provided: sphericalRingArea, sphericalTriangleArea */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sphericalRingArea", function() { return sphericalRingArea; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sphericalTriangleArea", function() { return sphericalTriangleArea; });
-var pi = Math.PI,
-    tau = 2 * pi,
-    quarterPi = pi / 4,
-    radians = pi / 180,
-    abs = Math.abs,
-    atan2 = Math.atan2,
-    cos = Math.cos,
-    sin = Math.sin;
-
-function halfArea(ring, closed) {
-  var i = 0,
-      n = ring.length,
-      sum = 0,
-      point = ring[closed ? i++ : n - 1],
-      lambda0, lambda1 = point[0] * radians,
-      phi1 = (point[1] * radians) / 2 + quarterPi,
-      cosPhi0, cosPhi1 = cos(phi1),
-      sinPhi0, sinPhi1 = sin(phi1);
-
-  for (; i < n; ++i) {
-    point = ring[i];
-    lambda0 = lambda1, lambda1 = point[0] * radians;
-    phi1 = (point[1] * radians) / 2 + quarterPi;
-    cosPhi0 = cosPhi1, cosPhi1 = cos(phi1);
-    sinPhi0 = sinPhi1, sinPhi1 = sin(phi1);
-
-    // Spherical excess E for a spherical triangle with vertices: south pole,
-    // previous point, current point.  Uses a formula derived from Cagnoli’s
-    // theorem.  See Todhunter, Spherical Trig. (1871), Sec. 103, Eq. (2).
-    // See https://github.com/d3/d3-geo/blob/master/README.md#geoArea
-    var dLambda = lambda1 - lambda0,
-        sdLambda = dLambda >= 0 ? 1 : -1,
-        adLambda = sdLambda * dLambda,
-        k = sinPhi0 * sinPhi1,
-        u = cosPhi0 * cosPhi1 + k * cos(adLambda),
-        v = k * sdLambda * sin(adLambda);
-    sum += atan2(v, u);
-  }
-
-  return sum;
-}
-
-function sphericalRingArea(ring, interior) {
-  var sum = halfArea(ring, true);
-  if (interior) sum *= -1;
-  return (sum < 0 ? tau + sum : sum) * 2;
-}
-
-function sphericalTriangleArea(t) {
-  return abs(halfArea(t, false)) * 2;
-}
-
-
-/***/ }),
-
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -31987,44 +29843,124 @@ function sphericalTriangleArea(t) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _loadData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./loadData */ "./src/loadData.js");
+/* harmony import */ var _renderMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./renderMap */ "./src/renderMap.js");
+
+
+Object(_loadData__WEBPACK_IMPORTED_MODULE_0__["loadMapData"])().then(function (data) {
+  var geoData = data.geoData,
+      arenaData = data.arenaData;
+  Object(_renderMap__WEBPACK_IMPORTED_MODULE_1__["renderMap"])(geoData, arenaData);
+});
+
+/***/ }),
+
+/***/ "./src/loadData.js":
+/*!*************************!*\
+  !*** ./src/loadData.js ***!
+  \*************************/
+/*! exports provided: loadMapData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadMapData", function() { return loadMapData; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-/* harmony import */ var topojson__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! topojson */ "./node_modules/topojson/index.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-var width = 900;
-var height = 600;
-var svg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".visual").append("svg").attr("class", "map").attr("preserveAspectRatio", "xMinYMin meet").attr("viewBox", "0 0 960 500");
-var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
-var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection);
-var tooltip = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("image").append("div").attr("class", "hidden tooltip");
-Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/us.json").then(function (data) {
-  svg.selectAll("path").data(data.features.filter(function (d) {
-    return !["Alaska", "Hawaii"].includes(d.properties.NAME);
-  })).enter().append("path").attr("class", "states").attr("d", path).attr("fill", "#fdb927") // base state color
+var loadMapData = function loadMapData() {
+  var geoData;
+  var arenaData;
+  return Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson")]).then(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        d1 = _ref2[0],
+        d2 = _ref2[1];
+
+    geoData = d1.features.filter(function (d) {
+      return !["Alaska", "Hawaii"].includes(d.properties.NAME);
+    });
+    arenaData = d2.features;
+    return {
+      geoData: geoData,
+      arenaData: arenaData
+    };
+  });
+};
+
+/***/ }),
+
+/***/ "./src/renderMap.js":
+/*!**************************!*\
+  !*** ./src/renderMap.js ***!
+  \**************************/
+/*! exports provided: renderMap */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderMap", function() { return renderMap; });
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+/* harmony import */ var d3_tip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-tip */ "./node_modules/d3-tip/index.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var d3 = _objectSpread(_objectSpread({}, d3__WEBPACK_IMPORTED_MODULE_0__), {}, {
+  tip: d3_tip__WEBPACK_IMPORTED_MODULE_1__["default"]
+}); //initialize tip
+
+
+var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
+  return "".concat(d.properties.abbreviation);
+}); // Helper functions with mouseOver effects
+
+var mouseOver = function mouseOver(d) {
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.5);
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
+};
+
+var mouseLeave = function mouseLeave(d) {
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.8);
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(100).style("stroke", "transparent"); // .call(tip);
+}; // initialize tip
+
+
+var renderMap = function renderMap(geoData, arenaData) {
+  var width = 900;
+  var height = 600;
+  var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map");
+  var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
+  var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection);
+  mapSvg.selectAll("path").data(geoData).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "#fdb927") // base state color
   .attr("stroke", "white") // white state border
   .attr("stroke-width", 5); // state line width
-  //map team logo
 
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson").then(function (data) {
-    var mouseOver = function mouseOver(d) {
-      Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(200).style("opacity", 0.5);
-      Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
-    };
-
-    var mouseLeave = function mouseLeave(d) {
-      Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(200).style("opacity", 0.8);
-      Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("stroke", "transparent");
-    };
-
-    svg.selectAll("logo").data(data.features).enter().append("svg:image").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
-      return projection(d.geometry.coordinates)[0] - width / 10 / 2;
-    }).attr("y", function (d) {
-      return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
-    }).attr("xlink:href", function (d) {
-      return d.properties.logo_url;
-    }).on("mouseover", mouseOver).on("mouseleave", mouseLeave);
-  });
-});
+  mapSvg.call(tip);
+  mapSvg.selectAll("logo").data(arenaData).enter().append("svg:image").attr("class", "logo-svg").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
+    return projection(d.geometry.coordinates)[0] - width / 10 / 2;
+  }).attr("y", function (d) {
+    return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
+  }).attr("xlink:href", function (d) {
+    return d.properties.logo_url;
+  }).on("mouseover", tip.show).on("mouseout", tip.hide);
+};
 
 /***/ })
 
