@@ -184,3 +184,10 @@ footer p {
 .state:hover {
   fill: #552583;
 }
+
+.logo-svg {
+  opacity: 0.6;
+}
+.logo-svg:hover {
+  opacity: 1;
+}

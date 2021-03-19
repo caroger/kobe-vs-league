@@ -29843,124 +29843,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-/* harmony import */ var d3_tip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-tip */ "./node_modules/d3-tip/index.js");
-/* harmony import */ var _loadData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./loadData */ "./src/loadData.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+/* harmony import */ var _loadData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./loadData */ "./src/loadData.js");
+/* harmony import */ var _renderMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./renderMap */ "./src/renderMap.js");
 
 
-
-
- // load data
-// let geoData;
-// let arenaData;
-
-Object(_loadData__WEBPACK_IMPORTED_MODULE_2__["loadMapData"])().then(function (data) {
+Object(_loadData__WEBPACK_IMPORTED_MODULE_0__["loadMapData"])().then(function (data) {
   var geoData = data.geoData,
       arenaData = data.arenaData;
-  console.log(geoData);
-  console.log(arenaData);
+  Object(_renderMap__WEBPACK_IMPORTED_MODULE_1__["renderMap"])(geoData, arenaData);
 });
-
-var d3 = _objectSpread(_objectSpread({}, d3__WEBPACK_IMPORTED_MODULE_0__), {}, {
-  tip: d3_tip__WEBPACK_IMPORTED_MODULE_1__["default"]
-}); // import { loadMapData } from "./loadData";
-// import $ from "jquery";
-
-
-var width = 900;
-var height = 600;
-var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map"); // .attr("width", width)
-// .attr("height", height)
-// .attr("preserveAspectRatio", "xMinYMin meet")
-// .attr("viewBox", "0 0 960 600");
-
-var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
-var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection); // Helper functions with mouseOver effects
-
-var mouseOver = function mouseOver(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.5);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
-  console.log(d);
-};
-
-var mouseLeave = function mouseLeave(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.8);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(100).style("stroke", "transparent");
-}; // initialize tip
-
-
-var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
-  return "".concat(d.properties.abbreviation);
-});
-Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["csv"])("./assets/data/game_stats.csv")]).then(function (_ref) {
-  var _ref2 = _slicedToArray(_ref, 3),
-      mapData = _ref2[0],
-      arenaData = _ref2[1],
-      gameData = _ref2[2];
-
-  mapSvg.selectAll("path").data(mapData.features.filter(function (d) {
-    return !["Alaska", "Hawaii"].includes(d.properties.NAME);
-  })).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "#fdb927") // base state color
-  .attr("stroke", "white") // white state border
-  .attr("stroke-width", 5); // state line width
-
-  mapSvg.call(tip);
-  mapSvg.selectAll("logo").data(arenaData.features).enter().append("svg:image").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
-    return projection(d.geometry.coordinates)[0] - width / 10 / 2;
-  }).attr("y", function (d) {
-    return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
-  }).attr("xlink:href", function (d) {
-    return d.properties.logo_url;
-  }).on("mouseover", mouseOver).on("mouseleave", mouseLeave).on("mouseover", tip.show).on("mouseout", tip.hide);
-}); // const renderTable = (team) => {
-//   var table = d3.select(".table-container").append("table");
-//   var thead = table.append("thead");
-//   var tbody = table.append("tbody");
-//   // append the header row
-//   thead
-//     .append("tr")
-//     .selectAll("th")
-//     .data(columns)
-//     .enter()
-//     .append("th")
-//     .text(function (column) {
-//       return column;
-//     });
-//   // create a row for each object in the data
-//   var rows = tbody.selectAll("tr").data(data).enter().append("tr");
-//   // create a cell in each row for each column
-//   var cells = rows
-//     .selectAll("td")
-//     .data(function (row) {
-//       return columns.map(function (column) {
-//         return { column: column, value: row[column] };
-//       });
-//     })
-//     .enter()
-//     .append("td")
-//     .text(function (d) {
-//       return d.value;
-//     });
-//   return table;
-// };
-// renderTable("LAL");
 
 /***/ }),
 
@@ -30005,6 +29896,70 @@ var loadMapData = function loadMapData() {
       arenaData: arenaData
     };
   });
+};
+
+/***/ }),
+
+/***/ "./src/renderMap.js":
+/*!**************************!*\
+  !*** ./src/renderMap.js ***!
+  \**************************/
+/*! exports provided: renderMap */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderMap", function() { return renderMap; });
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+/* harmony import */ var d3_tip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-tip */ "./node_modules/d3-tip/index.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var d3 = _objectSpread(_objectSpread({}, d3__WEBPACK_IMPORTED_MODULE_0__), {}, {
+  tip: d3_tip__WEBPACK_IMPORTED_MODULE_1__["default"]
+}); //initialize tip
+
+
+var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
+  return "".concat(d.properties.abbreviation);
+}); // Helper functions with mouseOver effects
+
+var mouseOver = function mouseOver(d) {
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.5);
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
+};
+
+var mouseLeave = function mouseLeave(d) {
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.8);
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(100).style("stroke", "transparent"); // .call(tip);
+}; // initialize tip
+
+
+var renderMap = function renderMap(geoData, arenaData) {
+  var width = 900;
+  var height = 600;
+  var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map");
+  var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
+  var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection);
+  mapSvg.selectAll("path").data(geoData).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "#fdb927") // base state color
+  .attr("stroke", "white") // white state border
+  .attr("stroke-width", 5); // state line width
+
+  mapSvg.call(tip);
+  mapSvg.selectAll("logo").data(arenaData).enter().append("svg:image").attr("class", "logo-svg").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
+    return projection(d.geometry.coordinates)[0] - width / 10 / 2;
+  }).attr("y", function (d) {
+    return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
+  }).attr("xlink:href", function (d) {
+    return d.properties.logo_url;
+  }).on("mouseover", tip.show).on("mouseout", tip.hide);
 };
 
 /***/ })
