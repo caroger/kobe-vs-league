@@ -29845,12 +29845,16 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _loadData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./loadData */ "./src/loadData.js");
 /* harmony import */ var _renderMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./renderMap */ "./src/renderMap.js");
+/* harmony import */ var _renderTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./renderTable */ "./src/renderTable.js");
+
 
 
 Object(_loadData__WEBPACK_IMPORTED_MODULE_0__["loadMapData"])().then(function (data) {
   var geoData = data.geoData,
-      arenaData = data.arenaData;
+      arenaData = data.arenaData,
+      gameData = data.gameData;
   Object(_renderMap__WEBPACK_IMPORTED_MODULE_1__["renderMap"])(geoData, arenaData);
+  Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])(gameData, "POR");
 });
 
 /***/ }),
@@ -29882,18 +29886,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var loadMapData = function loadMapData() {
   var geoData;
   var arenaData;
-  return Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson")]).then(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
+  var gameData;
+  return Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/game_stats.json")]).then(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 3),
         d1 = _ref2[0],
-        d2 = _ref2[1];
+        d2 = _ref2[1],
+        d3 = _ref2[2];
 
     geoData = d1.features.filter(function (d) {
       return !["Alaska", "Hawaii"].includes(d.properties.NAME);
     });
     arenaData = d2.features;
+    gameData = d3;
     return {
       geoData: geoData,
-      arenaData: arenaData
+      arenaData: arenaData,
+      gameData: gameData
     };
   });
 };
@@ -29960,6 +29968,35 @@ var renderMap = function renderMap(geoData, arenaData) {
   }).attr("xlink:href", function (d) {
     return d.properties.logo_url;
   }).on("mouseover", tip.show).on("mouseout", tip.hide);
+};
+
+/***/ }),
+
+/***/ "./src/renderTable.js":
+/*!****************************!*\
+  !*** ./src/renderTable.js ***!
+  \****************************/
+/*! exports provided: renderTable */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderTable", function() { return renderTable; });
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+
+var renderTable = function renderTable(data, team) {
+  //convert data to array of objects for d3
+  var teamData = Object.entries(data["".concat(team)]);
+  var table = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".table-container").append("table");
+  var thead = table.append("thead");
+  var tbody = table.append("tbody");
+  thead.append("tr").append("th").text("Kobe vs ".concat(team));
+  tbody.selectAll("tr").data(teamData).enter().append("tr").selectAll("td").data(function (d) {
+    return d;
+  }).enter().append("td").text(function (d) {
+    return d;
+  });
+  console.log(teamData);
 };
 
 /***/ })
