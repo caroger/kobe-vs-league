@@ -4,6 +4,7 @@ export const renderTable = (data, team) => {
   //convert data to array of objects for d3
   const teamData = Object.entries(data[`${team}`]);
   const table = select(".table-container").append("table");
+  table.exit().remove();
   const thead = table.append("thead");
   const tbody = table.append("tbody");
 

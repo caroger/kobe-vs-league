@@ -2,6 +2,7 @@ import { select, geoAlbersUsa, geoPath, json, selectAll, csv } from "d3";
 import * as _d3 from "d3";
 import _d3Tip from "d3-tip";
 const d3 = { ..._d3, tip: _d3Tip };
+import { renderTable } from "./renderTable";
 
 //initialize tip
 var tip = d3
@@ -23,16 +24,13 @@ const mouseOver = function (d) {
 
 const mouseLeave = function (d) {
   selectAll("image").transition().duration(100).style("opacity", 0.8);
-  select(this)
-    .transition()
-    .duration(100)
-    .style("stroke", "transparent")
-    // .call(tip);
+  select(this).transition().duration(100).style("stroke", "transparent");
+  // .call(tip);
 };
 
 // initialize tip
 
-export const renderMap = (geoData, arenaData) => {
+export const renderMap = (geoData, arenaData, gameData) => {
   const width = 900;
   const height = 600;
   const mapSvg = select(".map-container").append("svg").attr("class", "map");
@@ -67,5 +65,9 @@ export const renderMap = (geoData, arenaData) => {
     })
     .attr("xlink:href", (d) => d.properties.logo_url)
     .on("mouseover", tip.show)
-    .on("mouseout", tip.hide);
+    .on("mouseout", tip.hide)
+    .on("click", (d) => {
+      selectAll("table").selectAll("*").remove();
+      renderTable(gameData, d.properties.abbreviation);
+    });
 };
