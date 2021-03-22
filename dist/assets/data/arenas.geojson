@@ -5,10 +5,7 @@
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -75.172,
-          39.9012
-        ]
+        "coordinates": [-75.172, 39.9012]
       },
       "properties": {
         "abbreviation": "PHI",
@@ -20,17 +17,15 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/76ers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/philadelphia-76ers.svg",
+        "color": "#006bb6"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -71.0621,
-          42.3662
-        ]
+        "coordinates": [-71.0621, 42.3662]
       },
       "properties": {
         "abbreviation": "BOS",
@@ -42,17 +37,15 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/boston-celtics-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/boston-celtics.svg",
+        "color": "#008348"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -73.9934,
-          40.7505
-        ]
+        "coordinates": [-73.9934, 40.7505]
       },
       "properties": {
         "abbreviation": "NYK",
@@ -64,17 +57,15 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/new-york-knicks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/new-york-knicks.svg",
+        "color": "#f58426"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -73.9758,
-          40.6828
-        ]
+        "coordinates": [-73.9758, 40.6828]
       },
       "properties": {
         "abbreviation": "BKN",
@@ -86,17 +77,15 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/brooklyn-nets-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/brooklyn-nets.svg",
+        "color": "#000000"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -79.3791,
-          43.6435
-        ]
+        "coordinates": [-79.3791, 43.6435]
       },
       "properties": {
         "abbreviation": "TOR",
@@ -108,17 +97,15 @@
         "marker-color": "#b4cadb",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/toronto-raptors-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/toronto-raptors.svg",
+        "color": "#ce1141"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -87.9172,
-          43.0436
-        ]
+        "coordinates": [-87.9172, 43.0436]
       },
       "properties": {
         "abbreviation": "MIL",
@@ -130,17 +117,15 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/milwaukee-bucks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/milwaukee-bucks.svg",
+        "color": "#00471b"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -87.6742,
-          41.8807
-        ]
+        "coordinates": [-87.6742, 41.8807]
       },
       "properties": {
         "abbreviation": "CHI",
@@ -152,17 +137,15 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/chicago-bulls-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/chicago-bulls.svg",
+        "color": "#ce1141"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -81.6882,
-          41.4965
-        ]
+        "coordinates": [-81.6882, 41.4965]
       },
       "properties": {
         "abbreviation": "CLE",
@@ -174,17 +157,15 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/cleveland-cavaliers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/cleveland-cavaliers.svg",
+        "color": "#6f263d"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -83.0552,
-          42.341
-        ]
+        "coordinates": [-83.0552, 42.341]
       },
       "properties": {
         "abbreviation": "DET",
@@ -196,17 +177,15 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/detroit-pistons-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/detroit-pistons.svg",
+        "color": "#1d428a"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -86.1555,
-          39.7639
-        ]
+        "coordinates": [-86.1555, 39.7639]
       },
       "properties": {
         "abbreviation": "IND",
@@ -218,17 +197,15 @@
         "marker-color": "#257aba",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/indiana-pacers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/indiana-pacers.svg",
+        "color": "#002d62"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -111.9011,
-          40.7683
-        ]
+        "coordinates": [-111.9011, 40.7683]
       },
       "properties": {
         "abbreviation": "UTA",
@@ -240,17 +217,15 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/utah-jazz-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/utah-jazz.svg",
+        "color": "#002b5c"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -97.5151,
-          35.4634
-        ]
+        "coordinates": [-97.5151, 35.4634]
       },
       "properties": {
         "abbreviation": "OKC",
@@ -262,17 +237,15 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/oklahoma-city-thunder-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/oklahoma-city-thunder.svg",
+        "color": "#007ac1"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -93.2762,
-          44.9795
-        ]
+        "coordinates": [-93.2762, 44.9795]
       },
       "properties": {
         "abbreviation": "MIN",
@@ -284,17 +257,15 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/timberwolves-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/minnesota-timberwolves.svg",
+        "color": "#0c2340"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -122.6668,
-          45.5316
-        ]
+        "coordinates": [-122.6668, 45.5316]
       },
       "properties": {
         "abbreviation": "POR",
@@ -306,17 +277,15 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/portland-trail-blazers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/portland-trail-blazers.svg",
+        "color": "#e03a3e"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -105.0077,
-          39.7487
-        ]
+        "coordinates": [-105.0077, 39.7487]
       },
       "properties": {
         "abbreviation": "DEN",
@@ -328,17 +297,15 @@
         "marker-color": "#960000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/denver-nuggets-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/denver-nuggets.svg",
+        "color": "#fec524"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -118.2673,
-          34.043
-        ]
+        "coordinates": [-118.2673, 34.043]
       },
       "properties": {
         "abbreviation": "LAC",
@@ -350,17 +317,15 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/la-clippers-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/los-angeles-clippers.svg",
+        "color": "#c8102e"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -121.4996,
-          38.5806
-        ]
+        "coordinates": [-121.4996, 38.5806]
       },
       "properties": {
         "abbreviation": "SAC",
@@ -372,17 +337,15 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/sacramento-kings-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/sacramento-kings.svg",
+        "color": "#5a2b81"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -112.0712,
-          33.4457
-        ]
+        "coordinates": [-112.0712, 33.4457]
       },
       "properties": {
         "abbreviation": "PHX",
@@ -394,17 +357,15 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/phoenix-suns-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/phoenix-suns.svg",
+        "color": "#b95915"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -122.203,
-          37.7503
-        ]
+        "coordinates": [-122.203, 37.7503]
       },
       "properties": {
         "abbreviation": "GSW",
@@ -416,17 +377,15 @@
         "marker-color": "#c70000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/warriors-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/golden-state-warriors.svg",
+        "color": "#006bb6"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -77.0209,
-          38.8981
-        ]
+        "coordinates": [-77.0209, 38.8981]
       },
       "properties": {
         "abbreviation": "WAS",
@@ -438,17 +397,15 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/washington-wizards-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/washington-wizards.svg",
+        "color": "#002b5c"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -84.3963,
-          33.7573
-        ]
+        "coordinates": [-84.3963, 33.7573]
       },
       "properties": {
         "abbreviation": "ATL",
@@ -460,17 +417,15 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/atlanta-hawks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/atlanta-hawks.svg",
+        "color": "#e03a3e"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -80.187,
-          25.7814
-        ]
+        "coordinates": [-80.187, 25.7814]
       },
       "properties": {
         "abbreviation": "MIA",
@@ -482,17 +437,15 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/miami-heat-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/miami-heat.svg",
+        "color": "#98002e"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -80.8392,
-          35.2251
-        ]
+        "coordinates": [-80.8392, 35.2251]
       },
       "properties": {
         "abbreviation": "CHA",
@@ -504,17 +457,15 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/charlotte-hornets-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/charlotte-hornets.svg",
+        "color": "#00788c"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -81.3837,
-          28.5399
-        ]
+        "coordinates": [-81.3837, 28.5399]
       },
       "properties": {
         "abbreviation": "ORL",
@@ -526,17 +477,15 @@
         "marker-color": "#034e9e",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/orlando-magic-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/orlando-magic.svg",
+        "color": "#0077c0"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -96.8104,
-          32.7905
-        ]
+        "coordinates": [-96.8104, 32.7905]
       },
       "properties": {
         "abbreviation": "DAL",
@@ -548,17 +497,15 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/dallas-mavericks-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/dallas-mavericks.svg",
+        "color": "#0053bc"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -90.0821,
-          29.949
-        ]
+        "coordinates": [-90.0821, 29.949]
       },
       "properties": {
         "abbreviation": "NOP",
@@ -570,17 +517,15 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/pelicans-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/new-orleans-pelicans.svg",
+        "color": "#b4975a"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -95.3621,
-          29.7508
-        ]
+        "coordinates": [-95.3621, 29.7508]
       },
       "properties": {
         "abbreviation": "HOU",
@@ -591,17 +536,16 @@
         "arena": "Toyota Center",
         "marker-color": "#ff0000",
         "marker-size": "medium",
-        "marker-symbol": ""
+        "marker-symbol": "",
+        "logo_url": "assets/team_logo/houston-rockets.svg",
+        "color": "#ce1141"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -98.4375,
-          29.4271
-        ]
+        "coordinates": [-98.4375, 29.4271]
       },
       "properties": {
         "abbreviation": "SAS",
@@ -613,17 +557,15 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/spurs-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/san-antonio-spurs.svg",
+        "color": "#c4ced4"
       }
     },
     {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [
-          -90.0505,
-          35.1382
-        ]
+        "coordinates": [-90.0505, 35.1382]
       },
       "properties": {
         "abbreviation": "MEM",
@@ -635,7 +577,8 @@
         "marker-color": "#ff0000",
         "marker-size": "medium",
         "marker-symbol": "",
-        "logo_url": "assets/team_logo/memphis-grizzlies-logo@logotyp.us.svg"
+        "logo_url": "assets/team_logo/memphis-grizzlies.svg",
+        "color": "#5d76a9"
       }
     }
   ]

@@ -5,5 +5,5 @@ import { renderTable } from "./renderTable";
 loadMapData().then((data) => {
   const { geoData, arenaData, gameData } = data;
   renderMap(geoData, arenaData, gameData);
-  renderTable(gameData, "POR");
+  renderTable("POR", arenaData, gameData);
 });

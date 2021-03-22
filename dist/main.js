@@ -29854,7 +29854,7 @@ Object(_loadData__WEBPACK_IMPORTED_MODULE_0__["loadMapData"])().then(function (d
       arenaData = data.arenaData,
       gameData = data.gameData;
   Object(_renderMap__WEBPACK_IMPORTED_MODULE_1__["renderMap"])(geoData, arenaData, gameData);
-  Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])(gameData, "POR");
+  Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])("POR", arenaData, gameData);
 });
 
 /***/ }),
@@ -29970,8 +29970,8 @@ var renderMap = function renderMap(geoData, arenaData, gameData) {
   }).attr("xlink:href", function (d) {
     return d.properties.logo_url;
   }).on("mouseover", tip.show).on("mouseout", tip.hide).on("click", function (d) {
-    Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("table").selectAll("*").remove();
-    Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])(gameData, d.properties.abbreviation);
+    Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("table").remove();
+    Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])(d.properties.abbreviation, arenaData, gameData);
   });
 };
 
@@ -29989,20 +29989,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderTable", function() { return renderTable; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 
-var renderTable = function renderTable(data, team) {
+var renderTable = function renderTable(team, arenaData, gameData) {
   //convert data to array of objects for d3
-  var teamData = Object.entries(data["".concat(team)]);
+  var stats = Object.entries(gameData["".concat(team)]);
+  var bgColor = arenaData.filter(function (d) {
+    return d.properties.abbreviation === team;
+  })[0].properties.color || "purple";
   var table = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".table-container").append("table");
   table.exit().remove();
   var thead = table.append("thead");
   var tbody = table.append("tbody");
-  thead.append("tr").append("th").text("Kobe vs ".concat(team));
-  tbody.selectAll("tr").data(teamData).enter().append("tr").selectAll("td").data(function (d) {
+  thead.append("tr").append("th").attr("colspan", 2).text("Kobe vs ".concat(team)).style("background-color", bgColor);
+  tbody.selectAll("tr").data(stats).enter().append("tr").selectAll("td").data(function (d) {
     return d;
   }).enter().append("td").text(function (d) {
     return d;
   });
-  console.log(teamData);
+  tbody.selectAll("tr").filter(function (d, i, list) {
+    return i === list.length - 1;
+  }).attr("style", "border-bottom: 2px solid ".concat(bgColor));
+  console.log(bgColor);
 };
 
 /***/ })

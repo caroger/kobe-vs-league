@@ -67,7 +67,7 @@ export const renderMap = (geoData, arenaData, gameData) => {
     .on("mouseover", tip.show)
     .on("mouseout", tip.hide)
     .on("click", (d) => {
-      selectAll("table").selectAll("*").remove();
-      renderTable(gameData, d.properties.abbreviation);
+      selectAll("table").remove();
+      renderTable(d.properties.abbreviation, arenaData, gameData);
     });
 };
