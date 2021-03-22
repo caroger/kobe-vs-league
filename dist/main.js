@@ -29975,7 +29975,7 @@ var renderMap = function renderMap(geoData, arenaData, gameData) {
   }).on("mouseover", tip.show).on("mouseout", tip.hide).on("click", function (d) {
     Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("table").remove();
     Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])(d.properties.abbreviation, arenaData, gameData);
-  }); //adjust overlapping logs
+  }); //adjust overlapping logos
 
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#SAC").attr("transform", "translate(0,".concat(-logoSize / 3, ")"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#BKN").attr("transform", "translate(".concat(logoSize / 4, ",0)"));

@@ -73,13 +73,15 @@ export const renderMap = (geoData, arenaData, gameData) => {
       renderTable(d.properties.abbreviation, arenaData, gameData);
     });
 
-  //adjust overlapping logs
-  select("#SAC").attr("transform", `translate(0,${-logoSize/3})`);
-  select("#BKN").attr("transform", `translate(${logoSize/4},0)`);
-  select("#NYK").attr("transform", `translate(${-logoSize/4},0)`);
-  select("#PHI").attr("transform", `translate(${logoSize/4},${logoSize/4})`);
-  select("#WAS").attr("transform", `translate(${-logoSize/4},0})`);
-  select("#CLE").attr("transform", `translate(${logoSize/8})`);
-  select("#DET").attr("transform", `translate(${-logoSize/8})`);
-
+  //adjust overlapping logos
+  select("#SAC").attr("transform", `translate(0,${-logoSize / 3})`);
+  select("#BKN").attr("transform", `translate(${logoSize / 4},0)`);
+  select("#NYK").attr("transform", `translate(${-logoSize / 4},0)`);
+  select("#PHI").attr(
+    "transform",
+    `translate(${logoSize / 4},${logoSize / 4})`
+  );
+  select("#WAS").attr("transform", `translate(${-logoSize / 4},0})`);
+  select("#CLE").attr("transform", `translate(${logoSize / 8})`);
+  select("#DET").attr("transform", `translate(${-logoSize / 8})`);
 };
