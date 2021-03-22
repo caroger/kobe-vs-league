@@ -33,7 +33,11 @@ const mouseLeave = function (d) {
 export const renderMap = (geoData, arenaData, gameData) => {
   const width = 900;
   const height = 600;
-  const mapSvg = select(".map-container").append("svg").attr("class", "map");
+  const mapSvg = select(".map-container")
+    .append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 900 600")
+    .classed("map", true);
   const projection = geoAlbersUsa();
   const path = geoPath(projection);
   const logoSize = width / 16;
@@ -81,7 +85,7 @@ export const renderMap = (geoData, arenaData, gameData) => {
     "transform",
     `translate(${logoSize / 4},${logoSize / 4})`
   );
-  select("#WAS").attr("transform", `translate(${-logoSize / 4},0})`);
+  select("#WAS").attr("transform", `translate(${-logoSize / 4},0)`);
   select("#CLE").attr("transform", `translate(${logoSize / 8})`);
   select("#DET").attr("transform", `translate(${-logoSize / 8})`);
 };

@@ -29955,7 +29955,7 @@ var mouseLeave = function mouseLeave(d) {
 var renderMap = function renderMap(geoData, arenaData, gameData) {
   var width = 900;
   var height = 600;
-  var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map");
+  var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("preserveAspectRatio", "xMinYMin meet").attr("viewBox", "0 0 900 600").classed("map", true);
   var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
   var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection);
   var logoSize = width / 16;
@@ -29981,7 +29981,7 @@ var renderMap = function renderMap(geoData, arenaData, gameData) {
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#BKN").attr("transform", "translate(".concat(logoSize / 4, ",0)"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#NYK").attr("transform", "translate(".concat(-logoSize / 4, ",0)"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#PHI").attr("transform", "translate(".concat(logoSize / 4, ",").concat(logoSize / 4, ")"));
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#WAS").attr("transform", "translate(".concat(-logoSize / 4, ",0})"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#WAS").attr("transform", "translate(".concat(-logoSize / 4, ",0)"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#CLE").attr("transform", "translate(".concat(logoSize / 8, ")"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#DET").attr("transform", "translate(".concat(-logoSize / 8, ")"));
 };
