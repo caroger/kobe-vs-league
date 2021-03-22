@@ -36,6 +36,7 @@ export const renderMap = (geoData, arenaData, gameData) => {
   const mapSvg = select(".map-container").append("svg").attr("class", "map");
   const projection = geoAlbersUsa();
   const path = geoPath(projection);
+  const logoSize = width / 16;
 
   mapSvg
     .selectAll("path")
@@ -55,8 +56,9 @@ export const renderMap = (geoData, arenaData, gameData) => {
     .enter()
     .append("svg:image")
     .attr("class", "logo-svg")
-    .attr("width", width / 10)
-    .attr("height", height / 6.67)
+    .attr("id", (d) => `${d.properties.abbreviation}`)
+    .attr("width", logoSize)
+    .attr("height", logoSize)
     .attr("x", function (d) {
       return projection(d.geometry.coordinates)[0] - width / 10 / 2;
     })
@@ -70,4 +72,14 @@ export const renderMap = (geoData, arenaData, gameData) => {
       selectAll("table").remove();
       renderTable(d.properties.abbreviation, arenaData, gameData);
     });
+
+  //adjust overlapping logs
+  select("#SAC").attr("transform", `translate(0,${-logoSize/3})`);
+  select("#BKN").attr("transform", `translate(${logoSize/4},0)`);
+  select("#NYK").attr("transform", `translate(${-logoSize/4},0)`);
+  select("#PHI").attr("transform", `translate(${logoSize/4},${logoSize/4})`);
+  select("#WAS").attr("transform", `translate(${-logoSize/4},0})`);
+  select("#CLE").attr("transform", `translate(${logoSize/8})`);
+  select("#DET").attr("transform", `translate(${-logoSize/8})`);
+
 };

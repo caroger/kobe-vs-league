@@ -29958,12 +29958,15 @@ var renderMap = function renderMap(geoData, arenaData, gameData) {
   var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map");
   var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
   var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection);
+  var logoSize = width / 16;
   mapSvg.selectAll("path").data(geoData).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "#fdb927") // base state color
   .attr("stroke", "white") // white state border
   .attr("stroke-width", 5); // state line width
 
   mapSvg.call(tip);
-  mapSvg.selectAll("logo").data(arenaData).enter().append("svg:image").attr("class", "logo-svg").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
+  mapSvg.selectAll("logo").data(arenaData).enter().append("svg:image").attr("class", "logo-svg").attr("id", function (d) {
+    return "".concat(d.properties.abbreviation);
+  }).attr("width", logoSize).attr("height", logoSize).attr("x", function (d) {
     return projection(d.geometry.coordinates)[0] - width / 10 / 2;
   }).attr("y", function (d) {
     return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
@@ -29972,7 +29975,15 @@ var renderMap = function renderMap(geoData, arenaData, gameData) {
   }).on("mouseover", tip.show).on("mouseout", tip.hide).on("click", function (d) {
     Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("table").remove();
     Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])(d.properties.abbreviation, arenaData, gameData);
-  });
+  }); //adjust overlapping logs
+
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#SAC").attr("transform", "translate(0,".concat(-logoSize / 3, ")"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#BKN").attr("transform", "translate(".concat(logoSize / 4, ",0)"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#NYK").attr("transform", "translate(".concat(-logoSize / 4, ",0)"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#PHI").attr("transform", "translate(".concat(logoSize / 4, ",").concat(logoSize / 4, ")"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#WAS").attr("transform", "translate(".concat(-logoSize / 4, ",0})"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#CLE").attr("transform", "translate(".concat(logoSize / 8, ")"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#DET").attr("transform", "translate(".concat(-logoSize / 8, ")"));
 };
 
 /***/ }),
