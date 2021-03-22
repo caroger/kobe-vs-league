@@ -29845,12 +29845,16 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _loadData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./loadData */ "./src/loadData.js");
 /* harmony import */ var _renderMap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./renderMap */ "./src/renderMap.js");
+/* harmony import */ var _renderTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./renderTable */ "./src/renderTable.js");
+
 
 
 Object(_loadData__WEBPACK_IMPORTED_MODULE_0__["loadMapData"])().then(function (data) {
   var geoData = data.geoData,
-      arenaData = data.arenaData;
-  Object(_renderMap__WEBPACK_IMPORTED_MODULE_1__["renderMap"])(geoData, arenaData);
+      arenaData = data.arenaData,
+      gameData = data.gameData;
+  Object(_renderMap__WEBPACK_IMPORTED_MODULE_1__["renderMap"])(geoData, arenaData, gameData);
+  Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])("POR", arenaData, gameData);
 });
 
 /***/ }),
@@ -29882,18 +29886,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var loadMapData = function loadMapData() {
   var geoData;
   var arenaData;
-  return Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson")]).then(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
+  var gameData;
+  return Promise.all([Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/gz_2010_us_040_00_20m.json"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/arenas.geojson"), Object(d3__WEBPACK_IMPORTED_MODULE_0__["json"])("./assets/data/game_stats.json")]).then(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 3),
         d1 = _ref2[0],
-        d2 = _ref2[1];
+        d2 = _ref2[1],
+        d3 = _ref2[2];
 
     geoData = d1.features.filter(function (d) {
       return !["Alaska", "Hawaii"].includes(d.properties.NAME);
     });
     arenaData = d2.features;
+    gameData = d3;
     return {
       geoData: geoData,
-      arenaData: arenaData
+      arenaData: arenaData,
+      gameData: gameData
     };
   });
 };
@@ -29912,6 +29920,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderMap", function() { return renderMap; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 /* harmony import */ var d3_tip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-tip */ "./node_modules/d3-tip/index.js");
+/* harmony import */ var _renderTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./renderTable */ "./src/renderTable.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -29924,8 +29933,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var d3 = _objectSpread(_objectSpread({}, d3__WEBPACK_IMPORTED_MODULE_0__), {}, {
   tip: d3_tip__WEBPACK_IMPORTED_MODULE_1__["default"]
-}); //initialize tip
+});
 
+ //initialize tip
 
 var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
   return "".concat(d.properties.abbreviation);
@@ -29942,24 +29952,74 @@ var mouseLeave = function mouseLeave(d) {
 }; // initialize tip
 
 
-var renderMap = function renderMap(geoData, arenaData) {
+var renderMap = function renderMap(geoData, arenaData, gameData) {
   var width = 900;
   var height = 600;
   var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map");
   var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
   var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection);
+  var logoSize = width / 16;
   mapSvg.selectAll("path").data(geoData).enter().append("path").attr("class", "state").attr("d", path).attr("fill", "#fdb927") // base state color
   .attr("stroke", "white") // white state border
   .attr("stroke-width", 5); // state line width
 
   mapSvg.call(tip);
-  mapSvg.selectAll("logo").data(arenaData).enter().append("svg:image").attr("class", "logo-svg").attr("width", width / 10).attr("height", height / 6.67).attr("x", function (d) {
+  mapSvg.selectAll("logo").data(arenaData).enter().append("svg:image").attr("class", "logo-svg").attr("id", function (d) {
+    return "".concat(d.properties.abbreviation);
+  }).attr("width", logoSize).attr("height", logoSize).attr("x", function (d) {
     return projection(d.geometry.coordinates)[0] - width / 10 / 2;
   }).attr("y", function (d) {
     return projection(d.geometry.coordinates)[1] - height / 6.67 / 2;
   }).attr("xlink:href", function (d) {
     return d.properties.logo_url;
-  }).on("mouseover", tip.show).on("mouseout", tip.hide);
+  }).on("mouseover", tip.show).on("mouseout", tip.hide).on("click", function (d) {
+    Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("table").remove();
+    Object(_renderTable__WEBPACK_IMPORTED_MODULE_2__["renderTable"])(d.properties.abbreviation, arenaData, gameData);
+  }); //adjust overlapping logos
+
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#SAC").attr("transform", "translate(0,".concat(-logoSize / 3, ")"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#BKN").attr("transform", "translate(".concat(logoSize / 4, ",0)"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#NYK").attr("transform", "translate(".concat(-logoSize / 4, ",0)"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#PHI").attr("transform", "translate(".concat(logoSize / 4, ",").concat(logoSize / 4, ")"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#WAS").attr("transform", "translate(".concat(-logoSize / 4, ",0})"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#CLE").attr("transform", "translate(".concat(logoSize / 8, ")"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#DET").attr("transform", "translate(".concat(-logoSize / 8, ")"));
+};
+
+/***/ }),
+
+/***/ "./src/renderTable.js":
+/*!****************************!*\
+  !*** ./src/renderTable.js ***!
+  \****************************/
+/*! exports provided: renderTable */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderTable", function() { return renderTable; });
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+
+var renderTable = function renderTable(team, arenaData, gameData) {
+  //convert data to array of objects for d3
+  var stats = Object.entries(gameData["".concat(team)]);
+  var bgColor = arenaData.filter(function (d) {
+    return d.properties.abbreviation === team;
+  })[0].properties.color || "purple";
+  var table = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".table-container").append("table");
+  table.exit().remove();
+  var thead = table.append("thead");
+  var tbody = table.append("tbody");
+  thead.append("tr").append("th").attr("colspan", 2).text("Kobe vs ".concat(team)).style("background-color", bgColor);
+  tbody.selectAll("tr").data(stats).enter().append("tr").selectAll("td").data(function (d) {
+    return d;
+  }).enter().append("td").text(function (d) {
+    return d;
+  });
+  tbody.selectAll("tr").filter(function (d, i, list) {
+    return i === list.length - 1;
+  }).attr("style", "border-bottom: 2px solid ".concat(bgColor));
+  console.log(bgColor);
 };
 
 /***/ })
