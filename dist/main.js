@@ -30001,7 +30001,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 
 var renderTable = function renderTable(team, arenaData, gameData) {
-  //convert data to array of objects for d3
+  var logoURL = arenaData.filter(function (d) {
+    return d.properties.abbreviation === "".concat(team);
+  })[0].properties.logo_url;
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(../dist/".concat(logoURL, ")"));
+  console.log(logoURL);
   var stats = Object.entries(gameData["".concat(team)]);
   var bgColor = arenaData.filter(function (d) {
     return d.properties.abbreviation === team;

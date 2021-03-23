@@ -1,9 +1,14 @@
 import { select, selectAll } from "d3";
 
 export const renderTable = (team, arenaData, gameData) => {
-  //convert data to array of objects for d3
-  const stats = Object.entries(gameData[`${team}`]);
+  const logoURL = arenaData.filter(
+    (d) => d.properties.abbreviation === `${team}`
+  )[0].properties.logo_url;
 
+  select(".opponent-logo").style("background-image", `url(../dist/${logoURL})`);
+  console.log(logoURL);
+
+  const stats = Object.entries(gameData[`${team}`]);
   const bgColor =
     arenaData.filter((d) => d.properties.abbreviation === team)[0].properties
       .color || "purple";
