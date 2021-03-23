@@ -19,9 +19,9 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   display: block;
-  filter: blur(5px);
-  -webkit-filter: blur(10px);
-  transition: all 500ms;
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+  transition: all 300ms;
 }
 
 .showcase:hover::after {
@@ -149,7 +149,7 @@ footer p {
 }
 
 .visual {
-  height: 100vh;
+  height: 80vh;
   width: 100%;
   display: grid;
   grid-template-columns: 6fr 4fr;
@@ -164,23 +164,22 @@ footer p {
   width: 100%;
   background-color: whitesmoke;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.map {
-  /* height: 100%;
-  width: 100%; */
-  height: 600px;
-  width: 900px;
-  align-self: center;
+.map-heading {
+  color: #000;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 30px;
+  font-weight: 600;
 }
 
-.table {
-  display: block;
-  height: 100%;
-  width: 100%;
-  background: lightgrey;
+.map {
+  /* display: block;
+  margin: auto;
+  align-content: center; */
 }
 
 .state:hover {
@@ -189,6 +188,7 @@ footer p {
 
 .logo-svg {
   opacity: 0.6;
+  cursor: pointer;
 }
 .logo-svg:hover {
   opacity: 1;
@@ -196,22 +196,57 @@ footer p {
 }
 
 /* TABLE */
-
 .table-container {
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-title {
+  color: black;
+  display: flex;
+  width: 100%;
+  height: 150px;
+  justify-content: center;
+  padding: 20px 20px;
+}
+.kobe-logo {
+  width: 30%;
+}
+.kobe-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin: auto;
+}
+.vs-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: bold;
+  font-size: 40px;
+}
+.opponent-logo {
+  width: 30%;
+  background-size: 100% 100%;
 }
 
 table {
   border-collapse: collapse;
-  margin: 25px 0;
   font-size: 0.9em;
-  min-width: 400px;
-  border-radius: 5px 5px 0 0;
-  overflow: hidden;
+  min-width: 80%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  margin-top: 1rem;
+  border-radius: 20px 20px 0 0;
 }
 
 table thead tr {
-  /* background-color: #552583; */
   color: #fff;
   text-align: center;
   font-weight: bold;
@@ -229,8 +264,4 @@ table tbody tr {
 
 table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
-}
-
-table tbody tr:last-of-type {
-  /* border-bottom: 2px solid #009879; */
 }

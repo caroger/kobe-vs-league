@@ -29938,24 +29938,12 @@ var d3 = _objectSpread(_objectSpread({}, d3__WEBPACK_IMPORTED_MODULE_0__), {}, {
  //initialize tip
 
 var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
-  return "".concat(d.properties.abbreviation);
-}); // Helper functions with mouseOver effects
-
-var mouseOver = function mouseOver(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.5);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
-};
-
-var mouseLeave = function mouseLeave(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.8);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(100).style("stroke", "transparent"); // .call(tip);
-}; // initialize tip
-
-
+  return "".concat(d.properties.city, " ").concat(d.properties.team);
+});
 var renderMap = function renderMap(geoData, arenaData, gameData) {
   var width = 900;
   var height = 600;
-  var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("class", "map");
+  var mapSvg = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".map-container").append("svg").attr("preserveAspectRatio", "xMinYMin meet").attr("viewBox", "0 0 900 600").classed("map", true);
   var projection = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoAlbersUsa"])();
   var path = Object(d3__WEBPACK_IMPORTED_MODULE_0__["geoPath"])(projection);
   var logoSize = width / 16;
@@ -29981,7 +29969,7 @@ var renderMap = function renderMap(geoData, arenaData, gameData) {
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#BKN").attr("transform", "translate(".concat(logoSize / 4, ",0)"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#NYK").attr("transform", "translate(".concat(-logoSize / 4, ",0)"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#PHI").attr("transform", "translate(".concat(logoSize / 4, ",").concat(logoSize / 4, ")"));
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#WAS").attr("transform", "translate(".concat(-logoSize / 4, ",0})"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#WAS").attr("transform", "translate(".concat(-logoSize / 4, ",0)"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#CLE").attr("transform", "translate(".concat(logoSize / 8, ")"));
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("#DET").attr("transform", "translate(".concat(-logoSize / 8, ")"));
 };
@@ -30001,7 +29989,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 
 var renderTable = function renderTable(team, arenaData, gameData) {
-  //convert data to array of objects for d3
+  var logoURL = arenaData.filter(function (d) {
+    return d.properties.abbreviation === "".concat(team);
+  })[0].properties.logo_url;
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(../dist/".concat(logoURL, ")"));
   var stats = Object.entries(gameData["".concat(team)]);
   var bgColor = arenaData.filter(function (d) {
     return d.properties.abbreviation === team;
@@ -30019,7 +30010,6 @@ var renderTable = function renderTable(team, arenaData, gameData) {
   tbody.selectAll("tr").filter(function (d, i, list) {
     return i === list.length - 1;
   }).attr("style", "border-bottom: 2px solid ".concat(bgColor));
-  console.log(bgColor);
 };
 
 /***/ })
