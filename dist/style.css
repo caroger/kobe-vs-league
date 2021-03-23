@@ -171,6 +171,9 @@ footer p {
 
 .map-heading {
   color: #000;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 30px;
+  font-weight: 600;
 }
 
 .map {
@@ -221,8 +224,13 @@ footer p {
   margin: auto;
 }
 .vs-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 30%;
-  background-color: green;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: bold;
+  font-size: 40px;
 }
 .opponent-logo {
   width: 30%;

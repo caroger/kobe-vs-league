@@ -5,8 +5,7 @@ export const renderTable = (team, arenaData, gameData) => {
     (d) => d.properties.abbreviation === `${team}`
   )[0].properties.logo_url;
 
-  select(".opponent-logo").style("background-image", `url(../dist/${logoURL})`);
-  console.log(logoURL);
+  select(".opponent-logo").style("background-image", `url(${logoURL})`);
 
   const stats = Object.entries(gameData[`${team}`]);
   const bgColor =
@@ -41,6 +40,4 @@ export const renderTable = (team, arenaData, gameData) => {
       return i === list.length - 1;
     })
     .attr("style", `border-bottom: 2px solid ${bgColor}`);
-
-  console.log(bgColor);
 };

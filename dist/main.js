@@ -29938,20 +29938,8 @@ var d3 = _objectSpread(_objectSpread({}, d3__WEBPACK_IMPORTED_MODULE_0__), {}, {
  //initialize tip
 
 var tip = d3.tip().attr("class", "d3-tip").html(function (d) {
-  return "".concat(d.properties.abbreviation);
-}); // Helper functions with mouseOver effects
-
-var mouseOver = function mouseOver(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.5);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(200).style("opacity", 1).style("stroke", "black");
-};
-
-var mouseLeave = function mouseLeave(d) {
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("image").transition().duration(100).style("opacity", 0.8);
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(this).transition().duration(100).style("stroke", "transparent"); // .call(tip);
-}; // initialize tip
-
-
+  return "".concat(d.properties.city, " ").concat(d.properties.team);
+});
 var renderMap = function renderMap(geoData, arenaData, gameData) {
   var width = 900;
   var height = 600;
@@ -30004,8 +29992,7 @@ var renderTable = function renderTable(team, arenaData, gameData) {
   var logoURL = arenaData.filter(function (d) {
     return d.properties.abbreviation === "".concat(team);
   })[0].properties.logo_url;
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(../dist/".concat(logoURL, ")"));
-  console.log(logoURL);
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(".concat(logoURL, ")"));
   var stats = Object.entries(gameData["".concat(team)]);
   var bgColor = arenaData.filter(function (d) {
     return d.properties.abbreviation === team;
@@ -30023,7 +30010,6 @@ var renderTable = function renderTable(team, arenaData, gameData) {
   tbody.selectAll("tr").filter(function (d, i, list) {
     return i === list.length - 1;
   }).attr("style", "border-bottom: 2px solid ".concat(bgColor));
-  console.log(bgColor);
 };
 
 /***/ })

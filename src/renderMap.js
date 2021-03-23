@@ -9,26 +9,8 @@ var tip = d3
   .tip()
   .attr("class", "d3-tip")
   .html(function (d) {
-    return `${d.properties.abbreviation}`;
+    return `${d.properties.city} ${d.properties.team}`;
   });
-
-// Helper functions with mouseOver effects
-const mouseOver = function (d) {
-  selectAll("image").transition().duration(100).style("opacity", 0.5);
-  select(this)
-    .transition()
-    .duration(200)
-    .style("opacity", 1)
-    .style("stroke", "black");
-};
-
-const mouseLeave = function (d) {
-  selectAll("image").transition().duration(100).style("opacity", 0.8);
-  select(this).transition().duration(100).style("stroke", "transparent");
-  // .call(tip);
-};
-
-// initialize tip
 
 export const renderMap = (geoData, arenaData, gameData) => {
   const width = 900;
