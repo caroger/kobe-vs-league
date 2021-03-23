@@ -29992,7 +29992,7 @@ var renderTable = function renderTable(team, arenaData, gameData) {
   var logoURL = arenaData.filter(function (d) {
     return d.properties.abbreviation === "".concat(team);
   })[0].properties.logo_url;
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(../dist/".concat(logoURL, ")"));
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(".concat(logoURL, ")"));
   var stats = Object.entries(gameData["".concat(team)]);
   var bgColor = arenaData.filter(function (d) {
     return d.properties.abbreviation === team;
