@@ -10,6 +10,10 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+li {
+  list-style-type: none;
+}
+
 .showcase::after {
   content: "";
   height: 100vh;
@@ -19,19 +23,19 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   display: block;
-  filter: blur(2px);
-  -webkit-filter: blur(2px);
+  filter: blur(1px);
+  -webkit-filter: blur(1px);
   transition: all 300ms;
 }
 
 .showcase:hover::after {
-  filter: blur(0px);
-  -webkit-filter: blur(0px);
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
 }
 
 .showcase:hover .content {
-  filter: blur(2px);
-  -webkit-filter: blur(2px);
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
 }
 
 .content {
@@ -41,7 +45,7 @@ body {
   left: 50%;
   margin-top: 105px;
   margin-left: -145px;
-  width: 300px;
+  width: 450px;
   height: 350px;
   text-align: center;
   transition: all 1000ms;
@@ -152,7 +156,7 @@ footer p {
   height: 80vh;
   width: 100%;
   display: grid;
-  grid-template-columns: 6fr 4fr;
+  grid-template-columns: 7fr 3fr;
   justify-items: center;
   align-items: center;
   background-color: #fff;
@@ -174,6 +178,7 @@ footer p {
   font-family: "IBM Plex Mono", monospace;
   font-size: 30px;
   font-weight: 600;
+  margin-top: 5rem;
 }
 
 .map {
@@ -203,7 +208,7 @@ footer p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .table-title {
@@ -212,7 +217,8 @@ footer p {
   width: 100%;
   height: 150px;
   justify-content: center;
-  padding: 20px 20px;
+  padding: 2rem 2rem;
+  margin-top: 4rem;
 }
 .kobe-logo {
   width: 30%;
@@ -244,6 +250,7 @@ table {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   margin-top: 1rem;
   border-radius: 20px 20px 0 0;
+  cursor: pointer;
 }
 
 table thead tr {

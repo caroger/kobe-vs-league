@@ -29991,17 +29991,65 @@ __webpack_require__.r(__webpack_exports__);
 var renderTable = function renderTable(team, arenaData, gameData) {
   var logoURL = arenaData.filter(function (d) {
     return d.properties.abbreviation === "".concat(team);
-  })[0].properties.logo_url;
-  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(".concat(logoURL, ")"));
-  var stats = Object.entries(gameData["".concat(team)]);
+  })[0].properties.logo_url; // table heading
+
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(".concat(logoURL, ")")); //stats to render
+
+  var statsType = "total";
+  var stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
+  var headingText = "Career Total vs ".concat(team);
   var bgColor = arenaData.filter(function (d) {
     return d.properties.abbreviation === team;
   })[0].properties.color || "purple";
   var table = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".table-container").append("table");
-  table.exit().remove();
   var thead = table.append("thead");
   var tbody = table.append("tbody");
-  thead.append("tr").append("th").attr("colspan", 2).text("Kobe vs ".concat(team)).style("background-color", bgColor);
+  thead.append("tr").append("th").attr("colspan", 2).text(headingText).style("background-color", bgColor);
+  tbody.selectAll("tr").data(stats).enter().append("tr").selectAll("td").data(function (d) {
+    return d;
+  }).enter().append("td").text(function (d) {
+    return d;
+  }); // dynamically change border-bottom
+
+  tbody.selectAll("tr").filter(function (d, i, list) {
+    return i === list.length - 1;
+  }).attr("style", "border-bottom: 2px solid ".concat(bgColor)); //toggle different stats to display
+
+  table.on("click", function () {
+    switch (statsType) {
+      case "total":
+        statsType = "mean";
+        stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
+        headingText = "Career Average vs ".concat(team);
+        break;
+
+      case "mean":
+        statsType = "highlight";
+        stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
+        headingText = "Highlights vs ".concat(team);
+        break;
+
+      case "highlight":
+        statsType = "total";
+        stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
+        headingText = "Career Total vs ".concat(team);
+        break;
+
+      default:
+        break;
+    }
+
+    updateTable(stats, headingText, bgColor);
+    console.log(stats);
+  });
+};
+
+var updateTable = function updateTable(stats, headingText, bgColor) {
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("tbody").remove();
+  Object(d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"])("thead").remove();
+  var thead = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("table").append("thead");
+  var tbody = Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])("table").append("tbody");
+  thead.append("tr").append("th").attr("colspan", 2).text(headingText).style("background-color", bgColor);
   tbody.selectAll("tr").data(stats).enter().append("tr").selectAll("td").data(function (d) {
     return d;
   }).enter().append("td").text(function (d) {
