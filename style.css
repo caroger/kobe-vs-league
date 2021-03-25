@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  text-decoration: none;
 }
 body {
   background: rgba(0, 0, 0, 0.9);
@@ -10,6 +11,12 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+a {
+  color: inherit;
+}
+li {
+  list-style-type: none;
+}
 .showcase::after {
   content: "";
   height: 100vh;
@@ -18,20 +25,21 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  display: block;
-  filter: blur(2px);
-  -webkit-filter: blur(2px);
+  display: flex;
+  /* display: block; */
+  filter: blur(1px);
+  -webkit-filter: blur(1px);
   transition: all 300ms;
 }
 
 .showcase:hover::after {
-  filter: blur(0px);
-  -webkit-filter: blur(0px);
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
 }
 
 .showcase:hover .content {
-  filter: blur(2px);
-  -webkit-filter: blur(2px);
+  filter: blur(0px);
+  -webkit-filter: blur(0px);
 }
 
 .content {
@@ -41,7 +49,7 @@ body {
   left: 50%;
   margin-top: 105px;
   margin-left: -145px;
-  width: 300px;
+  width: 450px;
   height: 350px;
   text-align: center;
   transition: all 1000ms;
@@ -64,16 +72,32 @@ body {
 }
 
 .container {
-  max-width: 960px;
   margin: auto;
   overflow: hidden;
-  padding: 4rem 1rem;
+  padding: 1rem 1rem;
 }
 
-.grid-3 {
+.grid-4 {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  align-items: center;
+  background: rgba(51, 199, 199, 0);
+}
+
+.grid-4 div {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}
+
+.grid-4 div a svg {
+  transition: 0.2s color ease-in-out;
+}
+.grid-4 div a svg {
+  transition: 0.2s color ease-in-out;
 }
 
 .grid-2 {
@@ -149,10 +173,10 @@ footer p {
 }
 
 .visual {
-  height: 80vh;
+  height: 100vh;
   width: 100%;
   display: grid;
-  grid-template-columns: 6fr 4fr;
+  grid-template-columns: 7fr 3fr;
   justify-items: center;
   align-items: center;
   background-color: #fff;
@@ -166,7 +190,7 @@ footer p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .map-heading {
@@ -174,6 +198,7 @@ footer p {
   font-family: "IBM Plex Mono", monospace;
   font-size: 30px;
   font-weight: 600;
+  margin-top: 3rem;
 }
 
 .map {
@@ -203,7 +228,11 @@ footer p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+}
+
+.table-container * {
+  transition: 0.5s;
 }
 
 .table-title {
@@ -212,7 +241,8 @@ footer p {
   width: 100%;
   height: 150px;
   justify-content: center;
-  padding: 20px 20px;
+  padding: 2rem 2rem;
+  margin-top: 2rem;
 }
 .kobe-logo {
   width: 30%;
@@ -238,12 +268,13 @@ footer p {
 }
 
 table {
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 0.9em;
-  min-width: 80%;
+  min-width: 90%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   margin-top: 1rem;
-  border-radius: 20px 20px 0 0;
+  cursor: pointer;
 }
 
 table thead tr {
