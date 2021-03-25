@@ -2,12 +2,29 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta property="og:title" content="Kobe vs League" />
+    <meta
+      property="og:image"
+      content="../dist/assets/meta/Screen Shot 2021-03-24 at 9.26.50 PM.png"
+    />
+    <meta
+      property="og:description"
+      content="Interactive data visualization on Kobe Bryant's career stats against each of the opponent teams in the NBA. Built with Javascript, D3.js, HTML, CSS, and Python"
+    />
+    <meta
+      property="og:url"
+      content="https://caroger.github.io/kobe-vs-league/"
+    />
     <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css"
     />
-
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="assets/meta/favicon.ico"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
@@ -19,6 +36,35 @@
   </head>
   <body>
     <header class="showcase">
+      <div class="container grid-4">
+        <div>
+          <a
+            href="http://www.linkedin.com/in/rogerhu1989/"
+            target="_blank"
+            rel="noreferrer"
+            ><i class="fab fa-linkedin-in fa-2x"></i
+          ></a>
+        </div>
+        <div>
+          <a href="https://github.com/caroger" target="_blank" rel="noreferrer">
+            <i class="fab fa-github fa-2x"></i>
+          </a>
+        </div>
+        <div>
+          <a
+            href="https://angel.co/u/roger-hu-6"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <i class="fab fa-angellist fa-2x"></i>
+          </a>
+        </div>
+        <div>
+          <a href="mailto:rogerhu1989@gmail.com">
+            <i class="far fa-envelope fa-2x"></i>
+          </a>
+        </div>
+      </div>
       <div class="content">
         <img
           src="./assets/team_logo/los-angeles-lakers.svg"
@@ -36,7 +82,7 @@
     </header>
     <section class="visual">
       <div class="map-container">
-        <div class="map-heading">Click on Logo To see Stats</div>
+        <div class="map-heading">Click on Logo to Explore</div>
       </div>
       <div class="table-container">
         <div class="table-title">
@@ -51,54 +97,7 @@
         </div>
       </div>
     </section>
-    <section class="services">
-      <div class="container grid-3">
-        <div>
-          <i class="fab fa-linkedin-in fa-3x"></i>
-          <h3>Linkedin</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis,
-            itaque!
-          </p>
-        </div>
-        <div>
-          <i class="fab fa-github fa-3x"></i>
-          <h3>Github</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis,
-            itaque!
-          </p>
-        </div>
-        <div>
-          <i class="fab fa-angellist fa-3x"></i>
-          <h3>Angellist</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis,
-            itaque!
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="about">
-      <div class="container">
-        <div class="grid-2">
-          <div class="center">
-            <i class="fas fa-laptop-code fa-10x"></i>
-          </div>
-          <div>
-            <h3>About Me</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod esse
-              aspernatur reiciendis quis. Nesciunt, harum velit, corrupti dolore
-              voluptas expedita quae consequuntur, nisi qui perspiciatis non
-              explicabo aperiam commodi laboriosam nobis fugiat recusandae. Quam
-              vel perferendis corporis, sed totam dignissimos.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section class="services"></section>
 
     <footer class="center">
       <p>Roger Hu &copy; 2021</p>

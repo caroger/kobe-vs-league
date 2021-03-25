@@ -29997,7 +29997,7 @@ var renderTable = function renderTable(team, arenaData, gameData) {
 
   var statsType = "total";
   var stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
-  var headingText = "Career Total vs ".concat(team);
+  var headingText = "Career Total";
   var bgColor = arenaData.filter(function (d) {
     return d.properties.abbreviation === team;
   })[0].properties.color || "purple";
@@ -30020,19 +30020,19 @@ var renderTable = function renderTable(team, arenaData, gameData) {
       case "total":
         statsType = "mean";
         stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
-        headingText = "Career Average vs ".concat(team);
+        headingText = "Career Average";
         break;
 
       case "mean":
         statsType = "highlight";
         stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
-        headingText = "Highlights vs ".concat(team);
+        headingText = "Highlights";
         break;
 
       case "highlight":
         statsType = "total";
         stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
-        headingText = "Career Total vs ".concat(team);
+        headingText = "Career Total";
         break;
 
       default:
@@ -30052,7 +30052,7 @@ var updateTable = function updateTable(stats, headingText, bgColor) {
   thead.append("tr").append("th").attr("colspan", 2).text(headingText).style("background-color", bgColor);
   tbody.selectAll("tr").data(stats).enter().append("tr").selectAll("td").data(function (d) {
     return d;
-  }).enter().append("td").text(function (d) {
+  }).enter().append("td").transition().text(function (d) {
     return d;
   });
   tbody.selectAll("tr").filter(function (d, i, list) {

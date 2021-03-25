@@ -9,7 +9,7 @@ export const renderTable = (team, arenaData, gameData) => {
   //stats to render
   let statsType = "total";
   let stats = Object.entries(gameData[`${statsType}`][`${team}`]);
-  let headingText = `Career Total vs ${team}`;
+  let headingText = `Career Total`;
   const bgColor =
     arenaData.filter((d) => d.properties.abbreviation === team)[0].properties
       .color || "purple";
@@ -48,17 +48,17 @@ export const renderTable = (team, arenaData, gameData) => {
       case "total":
         statsType = "mean";
         stats = Object.entries(gameData[`${statsType}`][`${team}`]);
-        headingText = `Career Average vs ${team}`;
+        headingText = `Career Average`;
         break;
       case "mean":
         statsType = "highlight";
         stats = Object.entries(gameData[`${statsType}`][`${team}`]);
-        headingText = `Highlights vs ${team}`;
+        headingText = `Highlights`;
         break;
       case "highlight":
         statsType = "total";
         stats = Object.entries(gameData[`${statsType}`][`${team}`]);
-        headingText = `Career Total vs ${team}`;
+        headingText = `Career Total`;
         break;
       default:
         break;
@@ -88,6 +88,7 @@ const updateTable = (stats, headingText, bgColor) => {
     .data((d) => d)
     .enter()
     .append("td")
+    .transition()
     .text((d) => d);
 
   tbody
