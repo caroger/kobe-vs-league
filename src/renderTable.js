@@ -7,9 +7,9 @@ export const renderTable = (team, arenaData, gameData) => {
   // table heading
   select(".opponent-logo").style("background-image", `url(${logoURL})`);
   //stats to render
-  let statsType = "total";
+  let statsType = "highlight";
   let stats = Object.entries(gameData[`${statsType}`][`${team}`]);
-  let headingText = `Career Total`;
+  let headingText = `Career Highlight`;
   const bgColor =
     arenaData.filter((d) => d.properties.abbreviation === team)[0].properties
       .color || "purple";
@@ -53,7 +53,7 @@ export const renderTable = (team, arenaData, gameData) => {
       case "mean":
         statsType = "highlight";
         stats = Object.entries(gameData[`${statsType}`][`${team}`]);
-        headingText = `Highlights`;
+        headingText = `Career Highlight`;
         break;
       case "highlight":
         statsType = "total";

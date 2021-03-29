@@ -29995,9 +29995,9 @@ var renderTable = function renderTable(team, arenaData, gameData) {
 
   Object(d3__WEBPACK_IMPORTED_MODULE_0__["select"])(".opponent-logo").style("background-image", "url(".concat(logoURL, ")")); //stats to render
 
-  var statsType = "total";
+  var statsType = "highlight";
   var stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
-  var headingText = "Career Total";
+  var headingText = "Career Highlight";
   var bgColor = arenaData.filter(function (d) {
     return d.properties.abbreviation === team;
   })[0].properties.color || "purple";
@@ -30026,7 +30026,7 @@ var renderTable = function renderTable(team, arenaData, gameData) {
       case "mean":
         statsType = "highlight";
         stats = Object.entries(gameData["".concat(statsType)]["".concat(team)]);
-        headingText = "Highlights";
+        headingText = "Career Highlight";
         break;
 
       case "highlight":
