@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   text-decoration: none;
+  scroll-behavior: smooth;
 }
 body {
   background: rgba(0, 0, 0, 0.9);
@@ -62,11 +63,15 @@ li {
 }
 
 .content .title {
-  font-size: 2.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  font-size: 3rem;
   margin-top: 1rem;
 }
 
 .content .text {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.8rem;
   line-height: 1.7;
   margin-top: 1rem;
 }
@@ -308,7 +313,11 @@ table tbody tr:nth-of-type(even) {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
